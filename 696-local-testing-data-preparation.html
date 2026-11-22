@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>#696 本機測試資料準備｜#696 文本語料文件</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #004880; --primary-hover: #0065b3; --primary-dark: #002b4d;
+  --focus: #fb0; --info-bg: #e8f4ff; --info-border: #1a9bff;
+  --warning: #ffa90a; --success: #458227; --danger: #ec0303;
+  --text: #090909; --text-muted: #4d4d4d; --border: #ccc; --border-light: #e5e5e5;
+  --bg: #fff; --bg-soft: #f5f7fa; --footer: #292929;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: 1rem; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: "Noto Sans TC", "helvatica", "Arial", sans-serif, "微軟正黑體"; font-size: 16px; line-height: 1.75; display: flex; flex-direction: column; min-height: 100vh; }
+a { color: var(--primary); text-decoration: none; transition: opacity .16s ease-in; }
+a:hover { text-decoration: underline; }
+a:focus, button:focus, summary:focus { outline: none; box-shadow: 0 0 0 3px var(--focus); }
+.skip { position: absolute; left: -999px; } .skip:focus { left: 1rem; top: 1rem; background: #fff; padding: .25rem .5rem; z-index: 10; }
+header.site { background: var(--primary); color: #fff; border-bottom: 4px solid var(--focus); }
+header.site .inner { max-width: 1280px; margin: 0 auto; padding: .875rem 1rem; display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1.5rem; }
+header.site .brand { color: #fff; font-weight: 700; font-size: 1.25rem; letter-spacing: .04em; }
+header.site .brand small { display: block; font-size: .8125rem; font-weight: 400; opacity: .85; letter-spacing: 0; }
+nav.docs { background: var(--primary-dark); }
+nav.docs ul { max-width: 1280px; margin: 0 auto; padding: 0 1rem; list-style: none; display: flex; flex-wrap: wrap; }
+nav.docs a { display: block; color: #fff; padding: .625rem .875rem; font-size: .9375rem; }
+nav.docs a:hover { background: var(--primary-hover); text-decoration: none; }
+nav.docs a[aria-current="page"] { background: #fff; color: var(--primary); font-weight: 700; }
+.layout { flex: 1; width: 100%; max-width: 1280px; margin: 0 auto; padding: 2rem 1rem 3rem; display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 2.5rem; align-items: start; }
+.layout.no-toc { grid-template-columns: minmax(0, 1fr); }
+aside.toc { position: sticky; top: 1rem; max-height: calc(100vh - 2rem); overflow: auto; border-left: 3px solid var(--primary); padding: .25rem 0 .25rem .875rem; font-size: .875rem; }
+aside.toc summary { margin: 0 0 .5rem; font-size: .9375rem; font-weight: 700; color: var(--primary); cursor: pointer; list-style: none; }
+aside.toc summary::-webkit-details-marker { display: none; }
+aside.toc summary::after { content: " ▾"; font-size: .75rem; }
+aside.toc details:not([open]) summary::after { content: " ▸"; }
+aside.toc ul { list-style: none; margin: 0; padding: 0; }
+aside.toc li { margin: .25rem 0; } aside.toc li.l3 { padding-left: 1rem; font-size: .8125rem; }
+aside.toc a { color: var(--text-muted); } aside.toc a:hover { color: var(--primary); }
+main { min-width: 0; }
+.breadcrumb { font-size: .875rem; color: var(--text-muted); margin-bottom: .75rem; }
+h1.page-title { margin: 0 0 1.5rem; font-size: 1.875rem; color: var(--primary); line-height: 1.4; padding-bottom: .75rem; border-bottom: 2px solid var(--primary); }
+main h2 { margin: 2.5rem 0 1rem; font-size: 1.4375rem; color: var(--primary); padding-left: .75rem; border-left: 5px solid var(--primary); line-height: 1.4; }
+main h3 { margin: 2rem 0 .75rem; font-size: 1.1875rem; color: var(--primary-dark); }
+main h4 { margin: 1.5rem 0 .5rem; font-size: 1.0625rem; }
+main p, main ul, main ol { margin: .75rem 0; }
+main ul, main ol { padding-left: 1.5rem; }
+main li { margin: .25rem 0; }
+main li:has(> input[type=checkbox]) { list-style: none; margin-left: -1.5rem; }
+main input[type=checkbox] { width: 1rem; height: 1rem; margin: 0 .5rem 0 0; vertical-align: -2px; accent-color: var(--success); }
+main strong { color: var(--primary-dark); }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .875em; background: var(--bg-soft); border: 1px solid var(--border-light); border-radius: 4px; padding: .05em .35em; word-break: break-word; }
+pre { background: #1f2933; color: #f5f7fa; border-radius: 6px; padding: 1rem 1.25rem; overflow-x: auto; line-height: 1.6; }
+pre code { background: none; border: 0; padding: 0; color: inherit; font-size: .875rem; word-break: normal; }
+blockquote { margin: 1rem 0; padding: .75rem 1rem; background: var(--info-bg); border-left: 4px solid var(--info-border); color: var(--primary-dark); }
+blockquote p { margin: .25rem 0; }
+.table-wrap { overflow-x: auto; margin: 1rem 0; }
+table { border-collapse: collapse; width: 100%; font-size: .9375rem; }
+th, td { border: 1px solid var(--border); padding: .5rem .75rem; text-align: left; vertical-align: top; }
+thead th { background: var(--primary); color: #fff; font-weight: 700; white-space: nowrap; }
+tbody tr:nth-child(even) { background: var(--bg-soft); }
+hr { border: 0; border-top: 1px solid var(--border); margin: 2rem 0; }
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+.card { display: block; border: 1px solid var(--border); border-top: 4px solid var(--primary); border-radius: 4px; padding: 1rem 1.25rem; color: var(--text); background: #fff; transition: box-shadow .16s ease-in; }
+.card:hover { text-decoration: none; box-shadow: 0 4px 12px rgba(9, 9, 9, .15); }
+.card strong { display: block; color: var(--primary); font-size: 1.0625rem; margin-bottom: .25rem; }
+.card span { color: var(--text-muted); font-size: .875rem; }
+.card small { display: block; margin-top: .5rem; color: var(--text-muted); font-size: .75rem; }
+footer.site { background: var(--footer); color: #fff; text-align: center; padding: 1.25rem 1rem; font-size: .8125rem; line-height: 1.6; }
+footer.site span { opacity: .8; }
+@media (max-width: 960px) {
+  .layout { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; padding-top: 1.25rem; }
+  aside.toc { position: static; max-height: none; background: var(--bg-soft); padding: .5rem .875rem; }
+  aside.toc summary { margin: 0; }
+  aside.toc details[open] summary { margin-bottom: .5rem; }
+  nav.docs ul { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  nav.docs a { white-space: nowrap; }
+  h1.page-title { font-size: 1.5rem; }
+}
+@media print {
+  header.site, nav.docs, aside.toc, footer.site { display: none; }
+  .layout { display: block; padding: 0; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#content">跳至主要內容</a>
+<header class="site"><div class="inner"><a class="brand" href="index.html">新北市資料開放平臺<small>#696 文本語料專區・開發文件</small></a></div></header>
+<nav class="docs" aria-label="文件選單"><ul><li><a href="index.html">文件首頁</a></li><li><a href="696-status.html">文本語料進度與待辦</a></li><li><a href="696-corpus-api.html">文本語料 API 說明（前端串接用）</a></li><li><a href="696-corpus-development-plan.html">#744–#752 文本語料開發計畫</a></li><li><a href="696-corpus-publication-integration-checklist.html">文本資料集上架整合測試清單</a></li><li><a href="696-handoff.html">文本語料開發交接</a></li><li><a href="696-local-testing-data-preparation.html" aria-current="page">本機測試資料準備</a></li></ul></nav>
+<div class="layout">
+<aside class="toc" aria-label="本頁目錄"><details open><summary>本頁目錄</summary><ul><li class="l2"><a href="#資料範圍">資料範圍</a></li><li class="l2"><a href="#本機隔離與檢查">本機隔離與檢查</a></li><li class="l2"><a href="#尚待確認">尚待確認</a></li></ul></details></aside>
+<script>if (window.matchMedia('(max-width: 960px)').matches) document.querySelector('aside.toc details').removeAttribute('open')</script>
+<main id="content">
+<div class="breadcrumb"><a href="index.html">文件首頁</a> ／ #696 本機測試資料準備</div>
+<h1 class="page-title">#696 本機測試資料準備</h1>
+<p>此文件是準備清單，尚未連線、匯出或匯入任何資料庫。實際資料庫名稱、版本、授權及資料內容需由環境管理者確認；不將連線資訊或憑證放入版本控制或 issue。</p>
+<h2 id="資料範圍">資料範圍</h2>
+<ul>
+<li>專案設定分成 PostgreSQL <code>main</code> 與 <code>datastore</code>。文本語料程式直接使用 <code>main</code>；既有資料集功能及完整站台仍可能使用 <code>datastore</code>，不可假設只匯入主庫即可驗證全部功能。</li>
+<li>確認主庫結構、migration 歷程，以及必要的機關、科室、角色、權限、詞彙、測試提供者與會員資料。測試帳號須涵蓋資料管理者、同機關指定與非指定審核者、跨機關審核者及系統管理者。</li>
+<li>避免匯出不必要的個資、憑證、API 金鑰、連線字串或信件佇列；在提供副本前依資料管理要求處理敏感資料及關聯完整性。</li>
+<li>資料庫副本不包含實體上傳檔案或搜尋索引。文本測試應使用新建測試檔；若驗證既有 OD 的下載或搜尋，需另行確認檔案和索引的測試資料。</li>
+</ul>
+<h2 id="本機隔離與檢查">本機隔離與檢查</h2>
+<ol>
+<li>確認 Docker／PostgreSQL 可用及容器、網路與儲存位置皆屬獨立開發環境；主庫與 Datastore 的目標名稱應明確區分 testing 來源。</li>
+<li>準備適合開發的測試資料副本，確認 PostgreSQL 與備份工具版本相容，再由負責環境的人員提供安全的匯入方式。</li>
+<li>匯入前確認目標是空的獨立資料庫；匯入後檢查 migration 狀態、基本表與角色權限。不可對 testing 來源執行 migration 或測試寫入。</li>
+<li>設定本機專用檔案儲存、前後臺 URL、測試登入及搜尋服務；確認寄信、排程、對外公告及外部同步不會連向真實服務。</li>
+<li>後臺私有 npm 套件需既有 registry 存取權限；依本機環境安全地設定，不提交或分享 token。依專案 Dockerfile 使用 Node 24。</li>
+<li>在副本確認備份與回復方式後，才執行本分支 migration；將結果及差異記錄於 #696，並執行 <code>696-corpus-publication-integration-checklist.md</code>。</li>
+</ol>
+<h2 id="尚待確認">尚待確認</h2>
+<ul>
+<li>副本能否提供、如何去識別化，以及是否需要主庫和 Datastore 的完整資料。</li>
+<li>前臺假登入與後臺測試帳號在本機副本的設定方式；reCAPTCHA 等外部驗證如何在測試環境處理。</li>
+<li>公告和通知盤點中的正式範本，以及測試環境的安全收件方式。</li>
+<li>目前工作區 Docker Desktop WSL 整合尚未啟用；能否由使用者環境啟用或使用既有容器主機。</li>
+</ul>
+<p>程式碼補充：前臺假登入僅在非 production 且 <code>jwt.fakelogin</code> 明確啟用時可使用，並讀取固定 ID 的會員紀錄；本機副本必須準備對應的測試會員，且不能假設此方式已涵蓋多會員或後臺角色測試。實際登入及設定尚未驗證。</p>
+<p>後臺登入頁的測試按鈕固定使用 <code>b103</code>，而非正式環境且啟用 <code>jwt.fakelogin</code> 時的測試登入服務可依帳號名稱取得 token。多角色驗證仍需準備對應帳號、機關及權限，並在隔離環境確認實際登入流程；不得在 production 啟用此測試機制。</p>
+
+</main>
+</div>
+<footer class="site">本頁由 <code>docs/696-local-testing-data-preparation.md</code> 產生，請修改 md 後重新執行 <code>docs/html/build.mjs</code>。<br><span>新北市資料開放平臺 #696 文本語料專區・內部開發文件</span></footer>
+</body>
+</html>

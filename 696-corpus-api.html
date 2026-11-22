@@ -1,0 +1,801 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>#696 文本語料 API 說明（前端串接用）｜#696 文本語料文件</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #004880; --primary-hover: #0065b3; --primary-dark: #002b4d;
+  --focus: #fb0; --info-bg: #e8f4ff; --info-border: #1a9bff;
+  --warning: #ffa90a; --success: #458227; --danger: #ec0303;
+  --text: #090909; --text-muted: #4d4d4d; --border: #ccc; --border-light: #e5e5e5;
+  --bg: #fff; --bg-soft: #f5f7fa; --footer: #292929;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: 1rem; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: "Noto Sans TC", "helvatica", "Arial", sans-serif, "微軟正黑體"; font-size: 16px; line-height: 1.75; display: flex; flex-direction: column; min-height: 100vh; }
+a { color: var(--primary); text-decoration: none; transition: opacity .16s ease-in; }
+a:hover { text-decoration: underline; }
+a:focus, button:focus, summary:focus { outline: none; box-shadow: 0 0 0 3px var(--focus); }
+.skip { position: absolute; left: -999px; } .skip:focus { left: 1rem; top: 1rem; background: #fff; padding: .25rem .5rem; z-index: 10; }
+header.site { background: var(--primary); color: #fff; border-bottom: 4px solid var(--focus); }
+header.site .inner { max-width: 1280px; margin: 0 auto; padding: .875rem 1rem; display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1.5rem; }
+header.site .brand { color: #fff; font-weight: 700; font-size: 1.25rem; letter-spacing: .04em; }
+header.site .brand small { display: block; font-size: .8125rem; font-weight: 400; opacity: .85; letter-spacing: 0; }
+nav.docs { background: var(--primary-dark); }
+nav.docs ul { max-width: 1280px; margin: 0 auto; padding: 0 1rem; list-style: none; display: flex; flex-wrap: wrap; }
+nav.docs a { display: block; color: #fff; padding: .625rem .875rem; font-size: .9375rem; }
+nav.docs a:hover { background: var(--primary-hover); text-decoration: none; }
+nav.docs a[aria-current="page"] { background: #fff; color: var(--primary); font-weight: 700; }
+.layout { flex: 1; width: 100%; max-width: 1280px; margin: 0 auto; padding: 2rem 1rem 3rem; display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 2.5rem; align-items: start; }
+.layout.no-toc { grid-template-columns: minmax(0, 1fr); }
+aside.toc { position: sticky; top: 1rem; max-height: calc(100vh - 2rem); overflow: auto; border-left: 3px solid var(--primary); padding: .25rem 0 .25rem .875rem; font-size: .875rem; }
+aside.toc summary { margin: 0 0 .5rem; font-size: .9375rem; font-weight: 700; color: var(--primary); cursor: pointer; list-style: none; }
+aside.toc summary::-webkit-details-marker { display: none; }
+aside.toc summary::after { content: " ▾"; font-size: .75rem; }
+aside.toc details:not([open]) summary::after { content: " ▸"; }
+aside.toc ul { list-style: none; margin: 0; padding: 0; }
+aside.toc li { margin: .25rem 0; } aside.toc li.l3 { padding-left: 1rem; font-size: .8125rem; }
+aside.toc a { color: var(--text-muted); } aside.toc a:hover { color: var(--primary); }
+main { min-width: 0; }
+.breadcrumb { font-size: .875rem; color: var(--text-muted); margin-bottom: .75rem; }
+h1.page-title { margin: 0 0 1.5rem; font-size: 1.875rem; color: var(--primary); line-height: 1.4; padding-bottom: .75rem; border-bottom: 2px solid var(--primary); }
+main h2 { margin: 2.5rem 0 1rem; font-size: 1.4375rem; color: var(--primary); padding-left: .75rem; border-left: 5px solid var(--primary); line-height: 1.4; }
+main h3 { margin: 2rem 0 .75rem; font-size: 1.1875rem; color: var(--primary-dark); }
+main h4 { margin: 1.5rem 0 .5rem; font-size: 1.0625rem; }
+main p, main ul, main ol { margin: .75rem 0; }
+main ul, main ol { padding-left: 1.5rem; }
+main li { margin: .25rem 0; }
+main li:has(> input[type=checkbox]) { list-style: none; margin-left: -1.5rem; }
+main input[type=checkbox] { width: 1rem; height: 1rem; margin: 0 .5rem 0 0; vertical-align: -2px; accent-color: var(--success); }
+main strong { color: var(--primary-dark); }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .875em; background: var(--bg-soft); border: 1px solid var(--border-light); border-radius: 4px; padding: .05em .35em; word-break: break-word; }
+pre { background: #1f2933; color: #f5f7fa; border-radius: 6px; padding: 1rem 1.25rem; overflow-x: auto; line-height: 1.6; }
+pre code { background: none; border: 0; padding: 0; color: inherit; font-size: .875rem; word-break: normal; }
+blockquote { margin: 1rem 0; padding: .75rem 1rem; background: var(--info-bg); border-left: 4px solid var(--info-border); color: var(--primary-dark); }
+blockquote p { margin: .25rem 0; }
+.table-wrap { overflow-x: auto; margin: 1rem 0; }
+table { border-collapse: collapse; width: 100%; font-size: .9375rem; }
+th, td { border: 1px solid var(--border); padding: .5rem .75rem; text-align: left; vertical-align: top; }
+thead th { background: var(--primary); color: #fff; font-weight: 700; white-space: nowrap; }
+tbody tr:nth-child(even) { background: var(--bg-soft); }
+hr { border: 0; border-top: 1px solid var(--border); margin: 2rem 0; }
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+.card { display: block; border: 1px solid var(--border); border-top: 4px solid var(--primary); border-radius: 4px; padding: 1rem 1.25rem; color: var(--text); background: #fff; transition: box-shadow .16s ease-in; }
+.card:hover { text-decoration: none; box-shadow: 0 4px 12px rgba(9, 9, 9, .15); }
+.card strong { display: block; color: var(--primary); font-size: 1.0625rem; margin-bottom: .25rem; }
+.card span { color: var(--text-muted); font-size: .875rem; }
+.card small { display: block; margin-top: .5rem; color: var(--text-muted); font-size: .75rem; }
+footer.site { background: var(--footer); color: #fff; text-align: center; padding: 1.25rem 1rem; font-size: .8125rem; line-height: 1.6; }
+footer.site span { opacity: .8; }
+@media (max-width: 960px) {
+  .layout { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; padding-top: 1.25rem; }
+  aside.toc { position: static; max-height: none; background: var(--bg-soft); padding: .5rem .875rem; }
+  aside.toc summary { margin: 0; }
+  aside.toc details[open] summary { margin-bottom: .5rem; }
+  nav.docs ul { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  nav.docs a { white-space: nowrap; }
+  h1.page-title { font-size: 1.5rem; }
+}
+@media print {
+  header.site, nav.docs, aside.toc, footer.site { display: none; }
+  .layout { display: block; padding: 0; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#content">跳至主要內容</a>
+<header class="site"><div class="inner"><a class="brand" href="index.html">新北市資料開放平臺<small>#696 文本語料專區・開發文件</small></a></div></header>
+<nav class="docs" aria-label="文件選單"><ul><li><a href="index.html">文件首頁</a></li><li><a href="696-status.html">文本語料進度與待辦</a></li><li><a href="696-corpus-api.html" aria-current="page">文本語料 API 說明（前端串接用）</a></li><li><a href="696-corpus-development-plan.html">#744–#752 文本語料開發計畫</a></li><li><a href="696-corpus-publication-integration-checklist.html">文本資料集上架整合測試清單</a></li><li><a href="696-handoff.html">文本語料開發交接</a></li><li><a href="696-local-testing-data-preparation.html">本機測試資料準備</a></li></ul></nav>
+<div class="layout">
+<aside class="toc" aria-label="本頁目錄"><details open><summary>本頁目錄</summary><ul><li class="l2"><a href="#1-共通規則">1. 共通規則</a></li><li class="l3"><a href="#11-回應格式">1.1 回應格式</a></li><li class="l3"><a href="#12-驗證與身分">1.2 驗證與身分</a></li><li class="l3"><a href="#13-角色與資料範圍">1.3 角色與資料範圍</a></li><li class="l3"><a href="#14-版本與並行重要">1.4 版本與並行（重要）</a></li><li class="l3"><a href="#15-日期格式">1.5 日期格式</a></li><li class="l2"><a href="#2-狀態碼">2. 狀態碼</a></li><li class="l2"><a href="#3-分類與檔案">3. 分類與檔案</a></li><li class="l3"><a href="#31-分類kind">3.1 分類（kind）</a></li><li class="l3"><a href="#32-檔案">3.2 檔案</a></li><li class="l2"><a href="#4-後台-api">4. 後台 API</a></li><li class="l3"><a href="#41-get-corpuslist-文本資料集列表">4.1 GET corpus.list 文本資料集列表</a></li><li class="l3"><a href="#42-get-corpusinfo-單筆詳目">4.2 GET corpus.info 單筆詳目</a></li><li class="l3"><a href="#43-post-corpusadd-建立草稿">4.3 POST corpus.add 建立草稿</a></li><li class="l3"><a href="#44-post-corpusrevise-修改內容">4.4 POST corpus.revise 修改內容</a></li><li class="l3"><a href="#45-post-corpusresourceadd-corpusresourcereplace-corpusresourcedelete-檔案異動">4.5 POST corpus.resource.add / corpus.resource.replace / corpus.resource.delete 檔案異動</a></li><li class="l3"><a href="#46-get-corpusresourcedownload-下載單一檔案">4.6 GET corpus.resource.download 下載單一檔案</a></li><li class="l3"><a href="#47-get-corpustermlist-分類選項">4.7 GET corpus.term.list 分類選項</a></li><li class="l3"><a href="#48-post-corpustermset-設定分類">4.8 POST corpus.term.set 設定分類</a></li><li class="l3"><a href="#49-post-corpusreview-送審審核抽回取消">4.9 POST corpus.review 送審、審核、抽回、取消</a></li><li class="l3"><a href="#410-get-corpusreviewlist-待審列表">4.10 GET corpus.review.list 待審列表</a></li><li class="l3"><a href="#411-get-corpusreviewinfo-審核詳目">4.11 GET corpus.review.info 審核詳目</a></li><li class="l3"><a href="#412-get-corpusreviewhistorylist-歷程">4.12 GET corpus.review.history.list 歷程</a></li><li class="l3"><a href="#413-get-corpustransferlist-可移轉清單">4.13 GET corpus.transfer.list 可移轉清單</a></li><li class="l3"><a href="#414-post-corpustransfersubmit-機關內移轉">4.14 POST corpus.transfer.submit 機關內移轉</a></li><li class="l3"><a href="#415-get-feedbackcorpuslist-意見回饋列表後台">4.15 GET feedback.corpus.list 意見回饋列表（後台）</a></li><li class="l3"><a href="#416-get-feedbackcorpusinfo-意見回饋詳目">4.16 GET feedback.corpus.info 意見回饋詳目</a></li><li class="l3"><a href="#417-post-feedbackcorpusreview-暫存或送出回覆">4.17 POST feedback.corpus.review 暫存或送出回覆</a></li><li class="l3"><a href="#418-get-feedbackcorpusexport-匯出-csv">4.18 GET feedback.corpus.export 匯出 CSV</a></li><li class="l2"><a href="#5-前台-api">5. 前台 API</a></li><li class="l3"><a href="#51-get-corpuslist-公開列表公開">5.1 GET corpus.list 公開列表（公開）</a></li><li class="l3"><a href="#52-get-corpusinfo-公開詳目公開">5.2 GET corpus.info 公開詳目（公開）</a></li><li class="l3"><a href="#53-get-corpusresourcedownload-全檔-zip公開">5.3 GET corpus.resource.download 全檔 ZIP（公開）</a></li><li class="l3"><a href="#531-get-corpusresourcedownloadcheck-下載前檢查公開">5.3.1 GET corpus.resource.download.check 下載前檢查（公開）</a></li><li class="l3"><a href="#54-post-corpusstarupsert-評分會員">5.4 POST corpus.star.upsert 評分（會員）</a></li><li class="l3"><a href="#55-post-corpussubscribecorpusunsubscribe會員">5.5 POST corpus.subscribe、corpus.unsubscribe（會員）</a></li><li class="l3"><a href="#56-get-corpustermlist公開">5.6 GET corpus.term.list（公開）</a></li><li class="l3"><a href="#57-get-feedbackcorpuslist-我的意見會員">5.7 GET feedback.corpus.list 我的意見（會員）</a></li><li class="l3"><a href="#58-get-feedbackcorpusinfo-我的意見詳目會員只能看自己的">5.8 GET feedback.corpus.info 我的意見詳目（會員，只能看自己的）</a></li><li class="l3"><a href="#59-post-feedbackcorpussubmit-送出意見會員需-recaptcha">5.9 POST feedback.corpus.submit 送出意見（會員，需 reCAPTCHA）</a></li><li class="l2"><a href="#6-既有-api-的變動">6. 既有 API 的變動</a></li><li class="l2"><a href="#7-已知問題與注意事項">7. 已知問題與注意事項</a></li></ul></details></aside>
+<script>if (window.matchMedia('(max-width: 960px)').matches) document.querySelector('aside.toc details').removeAttribute('open')</script>
+<main id="content">
+<div class="breadcrumb"><a href="index.html">文件首頁</a> ／ #696 文本語料 API 說明（前端串接用）</div>
+<h1 class="page-title">#696 文本語料 API 說明（前端串接用）</h1>
+<p>更新日期：2026-11-22，對應分支 <code>feature/696-corpus-research</code>（<code>e99529ba</code>）。內容依程式碼整理，路由定義見 <code>backend/routes/{backstage,frontstage}/{corpus,feedback_corpus}.php</code>，主要邏輯在 <code>backend/app/Module/Corpus/</code>。進度與待辦見 <a href="696-status.html">696-status.md</a>。</p>
+<h2 id="1-共通規則">1. 共通規則</h2>
+<h3 id="11-回應格式">1.1 回應格式</h3>
+<p>所有 API（下載類成功時除外）都回 JSON，<strong>HTTP 狀態碼一律是 200</strong>，以 <code>success</code> 與 <code>code</code> 判斷結果：</p>
+<pre><code class="language-json">{ &quot;success&quot;: true, &quot;code&quot;: 200, &quot;s_message&quot;: &quot;&quot;, &quot;payload&quot;: { } }
+{ &quot;success&quot;: false, &quot;code&quot;: 400, &quot;s_message&quot;: &quot;請填寫原因&quot; }
+</code></pre>
+<ul>
+<li>失敗時沒有 <code>payload</code>；<code>code</code> 可能是 400、401、403、404、409、500。</li>
+<li>驗證錯誤的 <code>s_message</code> 是中文訊息，可直接顯示（本文件列出的錯誤訊息都是 <code>s_message</code> 的實際內容）。</li>
+<li>找不到資料時 <code>code: 404</code>，<code>s_message</code> 為中文，例如「找不到文本資料集」、「找不到檔案」、「找不到意見回饋」。</li>
+<li>權限不足：<code>code: 403</code>，<code>s_message: &quot;權限不足&quot;</code>；後台未登入：<code>code: 401</code>，<code>s_message: &quot;Not Login&quot;</code>。</li>
+<li>例外：後台請求<strong>完全沒帶 token</strong> 時回 <strong>HTTP 401</strong>（<code>s_message: &quot;TOKEN_NOT_FOUND&quot;</code>），axios 會走 error 分支。</li>
+<li>前台未登入呼叫需登入的 API：HTTP 200、<code>code: 401</code>、<code>s_message: &quot;Unauthorized&quot;</code>。</li>
+<li><code>409</code> 代表資料已被其他操作更新，前端應重新載入（見 1.4）。</li>
+</ul>
+<h3 id="12-驗證與身分">1.2 驗證與身分</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>使用端</th>
+<th>API 位址</th>
+<th>身分</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>後台</td>
+<td>backstage API，<code>/api/v1/...</code></td>
+<td><code>Authorization: Bearer &lt;jToken&gt;</code>；<code>.download</code>、<code>.export</code> 結尾的 GET 也可用 <code>jToken</code> cookie，因此可直接用瀏覽器開啟</td>
+</tr>
+<tr>
+<td>前台</td>
+<td>frontstage API，<code>/api/v1/...</code></td>
+<td>公開：<code>corpus.list</code>、<code>corpus.info</code>、<code>corpus.term.list</code>、<code>corpus.resource.download</code>；其餘都要新北卡會員登入（session）</td>
+</tr>
+</tbody></table>
+</div>
+<h3 id="13-角色與資料範圍">1.3 角色與資料範圍</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>角色</th>
+<th>role_id</th>
+<th>可管理的文本資料集</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>系統管理者 siteadmin</td>
+<td><code>41886952-d56e-4572-afff-14378c75d741</code></td>
+<td>全部</td>
+</tr>
+<tr>
+<td>機關資訊業務 depadmin</td>
+<td><code>39f45e00-109a-4120-9d73-ae886ffe9df1</code></td>
+<td>所屬一級機關之下</td>
+</tr>
+<tr>
+<td>資料提供者 provider</td>
+<td><code>1610f100-53b8-4c13-b30a-5a46aa0b3526</code></td>
+<td>只有自己擁有的</td>
+</tr>
+</tbody></table>
+</div>
+<p>審核權限另外限制：</p>
+<ul>
+<li>機關審核（狀態 <code>a03/b03/d03</code>）：只有<strong>被指派</strong>且同機關的 depadmin 可以同意或退回。</li>
+<li>系統審核（狀態 <code>a05/b05/d05</code>）：只有 siteadmin 可以同意或退回。siteadmin 可以看到機關審核中的資料，但不能審核。</li>
+</ul>
+<p>選單權限：siteadmin、depadmin 有編輯、審核、移轉、意見回饋四項；provider 只有編輯與意見回饋。API 本身不檢查選單權限，只檢查上面的範圍。</p>
+<h3 id="14-版本與並行重要">1.4 版本與並行（重要）</h3>
+<p>文本資料集每次儲存都會產生新的版本：</p>
+<ul>
+<li>編輯類 API（<code>corpus.revise</code>、<code>corpus.resource.*</code>、<code>corpus.term.set</code>）都要帶目前的 <code>revision_id</code>，成功後回傳<strong>新的 <code>revision_id</code></strong>，下一次呼叫必須改用新值。</li>
+<li>帶舊的 <code>revision_id</code> 會回 <code>code: 409</code>，訊息為「資料已更新，請重新載入後再編輯」（審核類為「資料已更新，請重新載入」）。</li>
+<li>修改已上架資料時，前台持續顯示上架版本，要等第二關審核通過才切換。</li>
+</ul>
+<h3 id="15-日期格式">1.5 日期格式</h3>
+<ul>
+<li>時間欄位為 <code>Y-m-d H:i:s</code>；<code>collection_start</code>、<code>collection_end</code> 一律是 <code>Y-m-d</code>（<code>corpus.info</code> 與 <code>corpus.review.info</code> 相同）。</li>
+</ul>
+<h2 id="2-狀態碼">2. 狀態碼</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>狀態</th>
+<th>意義</th>
+<th>狀態</th>
+<th>意義</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>a01</td>
+<td>[新上架]草稿</td>
+<td>c05</td>
+<td>已上架</td>
+</tr>
+<tr>
+<td>a02</td>
+<td>[新上架]退回</td>
+<td>d01</td>
+<td>[下架]草稿</td>
+</tr>
+<tr>
+<td>a03</td>
+<td>[新上架]機關審核中</td>
+<td>d02</td>
+<td>[下架]退回</td>
+</tr>
+<tr>
+<td>a05</td>
+<td>[新上架]系統管理者審核中</td>
+<td>d03</td>
+<td>[下架]機關審核中</td>
+</tr>
+<tr>
+<td>b01</td>
+<td>[修改]草稿</td>
+<td>d05</td>
+<td>[下架]系統管理者審核中</td>
+</tr>
+<tr>
+<td>b02</td>
+<td>[修改]退回</td>
+<td>e05</td>
+<td>已下架（終態）</td>
+</tr>
+<tr>
+<td>b03</td>
+<td>[修改]機關審核中</td>
+<td>deleted</td>
+<td>取消新草稿後的內部狀態，列表不會出現</td>
+</tr>
+<tr>
+<td>b05</td>
+<td>[修改]系統管理者審核中</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+</div>
+<p><code>c02</code>、<code>c04</code>、<code>e02</code>（系統退回）與 <code>c01</code>、<code>c03</code>、<code>e01</code> 在文本語料流程中不會出現。</p>
+<p>允許的操作（<code>CorpusWorkflow.php</code>）：</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>操作</th>
+<th>狀態變化</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>儲存（revise、檔案異動、分類設定）</td>
+<td>a01/a02→a01；c05/b01/b02→b01。<strong>下架草稿與下架退回（d01/d02）不可儲存</strong>，只能送出下架或取消</td>
+</tr>
+<tr>
+<td><code>submit_new</code> 送審新上架</td>
+<td>a01/a02 → a03</td>
+</tr>
+<tr>
+<td><code>submit_edit</code> 送審修改</td>
+<td>c05/b01/b02 → b03</td>
+</tr>
+<tr>
+<td><code>submit_unpublish</code> 申請下架</td>
+<td>c05/d01/d02 → d03</td>
+</tr>
+<tr>
+<td><code>agency_approve</code> 機關同意</td>
+<td>a03→a05；b03→b05；d03→d05</td>
+</tr>
+<tr>
+<td><code>site_approve</code> 系統同意</td>
+<td>a05→c05（上架）；b05→c05（換成新版本）；d05→e05（下架）</td>
+</tr>
+<tr>
+<td><code>reject</code> 退回</td>
+<td>a03/a05→a02；b03/b05→b02；d03/d05→d02</td>
+</tr>
+<tr>
+<td><code>withdraw</code> 抽回（只限機關審核中）</td>
+<td>a03→a01；b03→b01；d03→d01</td>
+</tr>
+<tr>
+<td><code>cancel</code> 取消</td>
+<td>a01/a02→deleted；b01/b02/d01/d02→c05（回到上架版本）</td>
+</tr>
+</tbody></table>
+</div>
+<p>不允許的操作會回「目前狀態無法編輯」或「目前狀態無法執行此操作」。</p>
+<p>第二關通過後：新上架與下架各產生一筆公告事件，<strong>修改不產生公告</strong>。</p>
+<h2 id="3-分類與檔案">3. 分類與檔案</h2>
+<h3 id="31-分類kind">3.1 分類（<code>kind</code>）</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>kind</th>
+<th>名稱</th>
+<th>預設選項</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>type</code></td>
+<td>文本資料類型</td>
+<td>政府出版品、政府計畫/報告、研究報告、政策與施政文件、活動與宣傳文本、臺灣在地文化、語言資源/詞彙、教育與學習資源、互動性溝通語料</td>
+</tr>
+<tr>
+<td><code>domain</code></td>
+<td>應用領域</td>
+<td>農業發展、健康醫療、能源管理、金融經濟、交通運輸、綠色永續、觀光旅遊、災害防救、文化藝術、公共行政</td>
+</tr>
+<tr>
+<td><code>language</code></td>
+<td>語系</td>
+<td>正體中文、臺語、客語、原住民族語、英文、日文、韓文</td>
+</tr>
+</tbody></table>
+</div>
+<ul>
+<li>每種 kind 可多選；另可加一筆自訂「其他」，送 <code>{ &quot;kind&quot;: &quot;domain&quot;, &quot;custom_value&quot;: &quot;育兒&quot; }</code>（不帶 <code>term_id</code>，1～500 字）。</li>
+<li>自訂值的顯示：後台回傳原始 <code>custom_value</code>；前台列表顯示「其他」；前台詳目顯示「其他 [育兒]」。</li>
+<li>送審時 type、domain、language 都至少要選一項。</li>
+<li><code>corpus.term.list</code> 依名稱排序，不是依預設順序。</li>
+</ul>
+<h3 id="32-檔案">3.2 檔案</h3>
+<ul>
+<li>上傳欄位名稱 <code>upload</code>，一次一個檔案（multipart/form-data）。</li>
+<li>格式：PDF、ODT、JSON、XML、TXT、CSV（副檔名不分大小寫），系統也會檢查檔案內容是否符合副檔名。</li>
+<li>單檔上限 100 MB；每個資料集 1～20 個檔案（送審時檢查至少 1 個）。</li>
+<li>檔名不可含 <code>/</code>、<code>\</code>、控制字元，最多 500 字。</li>
+</ul>
+<h2 id="4-後台-api">4. 後台 API</h2>
+<h3 id="41-get-corpuslist-文本資料集列表">4.1 GET <code>corpus.list</code> 文本資料集列表</h3>
+<p>依角色範圍列出（provider 只看到自己的）。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>參數</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>q</code></td>
+<td>比對名稱</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>逗號分隔的狀態碼</td>
+</tr>
+<tr>
+<td><code>exclude_status</code></td>
+<td>逗號分隔，要排除的狀態碼</td>
+</tr>
+<tr>
+<td><code>ou</code></td>
+<td>逗號分隔的機關代碼，受角色範圍限制</td>
+</tr>
+<tr>
+<td><code>uid</code></td>
+<td>擁有者（provider 會被強制為本人）</td>
+</tr>
+<tr>
+<td><code>page_num</code>、<code>page_limit</code></td>
+<td>預設 1、10；<code>page_limit</code> 最大 100</td>
+</tr>
+</tbody></table>
+</div>
+<p>回傳：<code>{ total, records }</code>，依狀態變更時間由新到舊。每筆：<code>id</code>、<code>owner_uid</code>、<code>unit_id</code>、<code>unit_full_name</code>（「機關/科室」）、<code>status</code>、<code>working_revision_id</code>、<code>title</code>、<code>description</code>、<code>egov_account</code>、<code>first_published_at</code>、<code>last_published_at</code>、<code>status_changed_at</code>。</p>
+<h3 id="42-get-corpusinfo-單筆詳目">4.2 GET <code>corpus.info</code> 單筆詳目</h3>
+<p>參數：<code>id</code>。權限：可管理此資料集的角色。</p>
+<p>回傳：</p>
+<ul>
+<li>資料集欄位：<code>id</code>、<code>owner_uid</code>、<code>unit_id</code>、<code>status</code>、<code>working_revision_id</code>、<code>published_revision_id</code>、<code>first_published_at</code>、<code>last_published_at</code>、<code>status_changed_at</code>、<code>created</code>、<code>changed</code></li>
+<li><code>working_revision</code>：工作版本（編輯中的內容），可能為 null</li>
+<li><code>published_revision</code>：上架版本，從未上架時為 null</li>
+</ul>
+<p><strong>Revision 物件</strong>：</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>欄位</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>id</code>、<code>corpus_id</code></td>
+<td>版本與資料集 id</td>
+</tr>
+<tr>
+<td><code>title</code>、<code>description</code></td>
+<td>名稱（≤500 字）、描述</td>
+</tr>
+<tr>
+<td><code>license_code</code>、<code>license_permanent</code>、<code>license_expiry_year</code></td>
+<td>授權方式、是否永久、截止年度</td>
+</tr>
+<tr>
+<td><code>egov_account</code></td>
+<td>eGov 帳號</td>
+</tr>
+<tr>
+<td><code>provider_uid</code>、<code>provider_unit_id</code>、<code>provider_unit_name</code>、<code>provider_name</code>、<code>provider_email</code></td>
+<td>資料提供者（由系統帶入，不可編輯）</td>
+</tr>
+<tr>
+<td><code>contact_name</code>、<code>contact_email</code>、<code>contact_phone</code></td>
+<td>對外顯示聯絡人</td>
+</tr>
+<tr>
+<td><code>collection_start</code>、<code>collection_end</code></td>
+<td>收錄期間 <code>Y-m-d</code></td>
+</tr>
+<tr>
+<td><code>publication_year_start</code>、<code>publication_year_end</code></td>
+<td>發布年份</td>
+</tr>
+<tr>
+<td><code>related_url</code>、<code>spatial_coverage</code>、<code>notes</code></td>
+<td>相關網址、空間範圍、備註</td>
+</tr>
+<tr>
+<td><code>open_status</code></td>
+<td><code>public</code> 全公開、<code>ai_training</code> 限 AI 訓練</td>
+</tr>
+<tr>
+<td><code>created_by</code>、<code>created</code></td>
+<td>建立者、建立時間</td>
+</tr>
+<tr>
+<td><code>resources</code></td>
+<td><code>[{ id, original_name, file_format, mime_type, size, position }]</code>，<code>file_format</code> 為大寫副檔名，<code>size</code> 單位 bytes</td>
+</tr>
+<tr>
+<td><code>terms</code></td>
+<td><code>[{ id, kind, term_id, custom_value, created_by, position }]</code>，自訂值的 <code>term_id</code> 為 null</td>
+</tr>
+</tbody></table>
+</div>
+<h3 id="43-post-corpusadd-建立草稿">4.3 POST <code>corpus.add</code> 建立草稿</h3>
+<p>權限：provider、depadmin、siteadmin，且帳號需有所屬機關。</p>
+<p>Body（JSON），草稿階段全部選填：</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>欄位</th>
+<th>型別與限制</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>title</code></td>
+<td>字串，≤500 字，不可與其他資料集重複</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>字串</td>
+</tr>
+<tr>
+<td><code>license_code</code></td>
+<td>字串，≤100 字；送審時須為 <code>SAITDL-1.0</code>、<code>ODC-By</code>、<code>CC-BY-SA</code>、<code>ODbL</code>、<code>CC-BY-NC</code>、<code>CC-BY-ND</code>、<code>CC-BY-NC-SA</code>、<code>CC-BY-NC-ND</code></td>
+</tr>
+<tr>
+<td><code>license_permanent</code></td>
+<td>JSON 布林值或 null（字串 <code>&quot;true&quot;</code> 會被拒絕）</td>
+</tr>
+<tr>
+<td><code>license_expiry_year</code></td>
+<td>4 位數年份；非永久授權時送審必填</td>
+</tr>
+<tr>
+<td><code>egov_account</code></td>
+<td>字串，≤500 字</td>
+</tr>
+<tr>
+<td><code>contact_name</code>、<code>contact_email</code>、<code>contact_phone</code></td>
+<td>字串，≤500 字；未提供時預設帶入登入者資料；email 須為正確格式</td>
+</tr>
+<tr>
+<td><code>collection_start</code>、<code>collection_end</code></td>
+<td><code>Y-m-d</code>，結束不得早於開始</td>
+</tr>
+<tr>
+<td><code>publication_year_start</code>、<code>publication_year_end</code></td>
+<td>4 位數年份，結束不得早於開始</td>
+</tr>
+<tr>
+<td><code>related_url</code></td>
+<td>字串，≤2048 字</td>
+</tr>
+<tr>
+<td><code>spatial_coverage</code>、<code>notes</code></td>
+<td>字串</td>
+</tr>
+<tr>
+<td><code>open_status</code></td>
+<td><code>public</code> 或 <code>ai_training</code>（送審時檢查）</td>
+</tr>
+</tbody></table>
+</div>
+<p>傳 <code>null</code> 或空字串代表清空該欄位。</p>
+<p>回傳：<code>{ id, revision_id, status: &quot;a01&quot; }</code></p>
+<p>錯誤：「欄位格式錯誤：&lt;欄位&gt;」、「結束時間不得早於開始時間」、「聯絡人電子郵件格式錯誤」、「發佈結束年份不得早於開始年份」、「文本資料集名稱不得重複」。</p>
+<h3 id="44-post-corpusrevise-修改內容">4.4 POST <code>corpus.revise</code> 修改內容</h3>
+<p>Body：<code>id</code>、<code>revision_id</code>，加上 4.3 中要修改的欄位；只有傳入的欄位會被更新。</p>
+<p>回傳：<code>{ id, revision_id: &lt;新版本&gt;, status }</code>。已上架資料修改後狀態變為 <code>b01</code>。</p>
+<p>錯誤：同 4.3，另有 409（版本已變更）、「目前狀態無法編輯」。</p>
+<h3 id="45-post-corpusresourceadd-corpusresourcereplace-corpusresourcedelete-檔案異動">4.5 POST <code>corpus.resource.add</code> / <code>corpus.resource.replace</code> / <code>corpus.resource.delete</code> 檔案異動</h3>
+<p>multipart/form-data（delete 也可送 JSON）：</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>欄位</th>
+<th>add</th>
+<th>replace</th>
+<th>delete</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>id</code>、<code>revision_id</code></td>
+<td>必填</td>
+<td>必填</td>
+<td>必填</td>
+</tr>
+<tr>
+<td><code>resource_id</code></td>
+<td>—</td>
+<td>必填（要被替換的檔案）</td>
+<td>必填</td>
+</tr>
+<tr>
+<td><code>upload</code></td>
+<td>必填</td>
+<td>必填</td>
+<td>—</td>
+</tr>
+</tbody></table>
+</div>
+<p>回傳：<code>{ id, revision_id: &lt;新版本&gt;, status, resource_id }</code>；<code>resource_id</code> 是新檔案的 id，delete 沒有此欄位。</p>
+<p>錯誤：「檔案操作參數格式錯誤」、「請選擇檔案」、「檔案上傳失敗」、「每個檔案不得超過100 MB」、「檔案名稱格式錯誤」、「檔案格式不支援」、「檔案內容與格式不符」、「最多上傳20個檔案」、「找不到要操作的檔案」、409、「目前狀態無法編輯」。</p>
+<h3 id="46-get-corpusresourcedownload-下載單一檔案">4.6 GET <code>corpus.resource.download</code> 下載單一檔案</h3>
+<p>參數：<code>id</code>、<code>resource_id</code>、<code>version</code>（<code>working</code> 預設，或 <code>published</code>）。</p>
+<p>成功時回檔案本體（<code>application/octet-stream</code>，檔名在 <code>Content-Disposition</code> 的 <code>filename*</code>）；失敗時回 JSON（HTTP 200），前端需判斷回傳的 <code>Content-Type</code> 是否為 <code>application/json</code>。審核頁可用 <code>version=published</code> 下載前次上架的檔案。</p>
+<h3 id="47-get-corpustermlist-分類選項">4.7 GET <code>corpus.term.list</code> 分類選項</h3>
+<p>回傳：<code>{ total, records: [{ tid, name, machine_name, weight, image_url, kind }] }</code>，只含啟用中的預設選項。</p>
+<h3 id="48-post-corpustermset-設定分類">4.8 POST <code>corpus.term.set</code> 設定分類</h3>
+<p>整組替換，Body：</p>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;...&quot;, &quot;revision_id&quot;: &quot;...&quot;,
+  &quot;terms&quot;: [
+    { &quot;kind&quot;: &quot;type&quot;, &quot;term_id&quot;: &quot;&lt;tid&gt;&quot; },
+    { &quot;kind&quot;: &quot;domain&quot;, &quot;term_id&quot;: &quot;&lt;tid&gt;&quot; },
+    { &quot;kind&quot;: &quot;domain&quot;, &quot;custom_value&quot;: &quot;育兒&quot; },
+    { &quot;kind&quot;: &quot;language&quot;, &quot;term_id&quot;: &quot;&lt;tid&gt;&quot; }
+  ]
+}
+</code></pre>
+<ul>
+<li>每一項只能帶 <code>term_id</code> 或 <code>custom_value</code> 其中一個；最多 100 項，空陣列代表清空。</li>
+<li>回傳：<code>{ id, revision_id: &lt;新版本&gt;, status }</code>。</li>
+<li>錯誤：「分類參數格式錯誤」、「分類格式錯誤」、「分類選項重複或格式錯誤」、「其他選項每個類別限一項」（<code>custom_value</code> 為空字串時也是這個訊息）、「其他選項格式錯誤」、「分類選項不存在」、409。</li>
+</ul>
+<h3 id="49-post-corpusreview-送審審核抽回取消">4.9 POST <code>corpus.review</code> 送審、審核、抽回、取消</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>欄位</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>id</code>、<code>revision_id</code></td>
+<td>必填</td>
+</tr>
+<tr>
+<td><code>action</code></td>
+<td><code>submit_new</code>、<code>submit_edit</code>、<code>submit_unpublish</code>、<code>agency_approve</code>、<code>site_approve</code>、<code>reject</code>、<code>withdraw</code>、<code>cancel</code></td>
+</tr>
+<tr>
+<td><code>reason</code></td>
+<td><code>submit_edit</code>、<code>submit_unpublish</code>、<code>reject</code> 必填</td>
+</tr>
+<tr>
+<td><code>reviewer_uids</code></td>
+<td>送審（<code>submit_*</code>）必填，1～100 位同機關、啟用中的機關資訊業務，不可重複</td>
+</tr>
+</tbody></table>
+</div>
+<p>權限：同意與退回依 1.3 的審核規則；其他操作需可管理此資料集。</p>
+<p>送審新上架與修改時會做完整檢查：</p>
+<ul>
+<li>「請填寫必填欄位：&lt;欄位&gt;」：title、description、license_code、egov_account、contact_name、contact_email、contact_phone、open_status，以及系統帶入的 provider 欄位</li>
+<li>「資料集描述不可與資料集名稱相同」、「授權方式不正確」、「開放狀態不正確」、「電子郵件格式不正確」</li>
+<li>「請選擇授權有效期間」、「請選擇授權截止年度」、「發佈年份區間不正確」（兩個年份都必填）</li>
+<li>「收錄日期格式不正確」、「結束時間不得早於開始時間」、「請上傳1至20個檔案」、「請選擇必填分類：<kind>」</li>
+</ul>
+<p>其他錯誤：「審核操作參數格式錯誤」、「請填寫原因」、「請選擇審核人員」、「審核人員不得重複」、「審核人員必須為同機關的機關資訊業務」、「目前狀態無法執行此操作」、409、403。</p>
+<p>回傳：<code>{ id, revision_id, status }</code>。取消新草稿時 <code>status</code> 為 <code>deleted</code>。</p>
+<h3 id="410-get-corpusreviewlist-待審列表">4.10 GET <code>corpus.review.list</code> 待審列表</h3>
+<p>權限：depadmin（只看到指派給自己的機關審核）、siteadmin。</p>
+<p>參數：<code>q</code>（比對名稱與描述）、<code>stage</code>（<code>all</code> 預設、<code>agency</code> 機關審核、<code>site</code> 系統審核）、<code>ou</code>、<code>page_num</code>、<code>page_limit</code>。</p>
+<p>回傳：<code>{ total, records: [{ id, owner_uid, unit_id, unit_full_name, status, working_revision_id, title, description, first_published_at, status_changed_at }] }</code>。siteadmin 用 <code>stage=all</code> 也會看到機關審核中的資料，但無法審核。</p>
+<h3 id="411-get-corpusreviewinfo-審核詳目">4.11 GET <code>corpus.review.info</code> 審核詳目</h3>
+<p>參數：<code>id</code>。權限：目前輪到自己審核才能讀取，否則 403。</p>
+<p>回傳：<code>id</code>、<code>status</code>、<code>revision_id</code>、<code>working_revision</code>、<code>published_revision</code>，以及：</p>
+<pre><code class="language-json">&quot;review&quot;: {
+  &quot;submission_action&quot;: &quot;submit_edit&quot;,
+  &quot;reason&quot;: &quot;補充 2025 年資料&quot;,
+  &quot;previous_rejection&quot;: null
+}
+</code></pre>
+<p><code>previous_rejection</code> 是本輪之前被退回的原因。修改審核可比較 <code>working_revision.resources</code> 與 <code>published_revision.resources</code> 顯示檔案差異。</p>
+<h3 id="412-get-corpusreviewhistorylist-歷程">4.12 GET <code>corpus.review.history.list</code> 歷程</h3>
+<p>參數：<code>id</code>、<code>page_num</code>、<code>page_limit</code>。</p>
+<p>回傳：<code>{ total, records }</code>，由新到舊。每筆：<code>id</code>、<code>revision_id</code>、<code>from_status</code>、<code>status</code>、<code>action</code>（<code>create</code>、<code>save</code>、<code>submit_*</code>、<code>agency_approve</code>、<code>site_approve</code>、<code>reject</code>、<code>withdraw</code>、<code>cancel</code>、<code>transfer</code>）、<code>message</code>（原因；移轉時為「來源姓名 -&gt; 目標姓名」）、<code>title</code>、<code>created</code>、<code>user_name</code>、<code>user_fullname</code>、<code>user_unit_full_name</code>。</p>
+<h3 id="413-get-corpustransferlist-可移轉清單">4.13 GET <code>corpus.transfer.list</code> 可移轉清單</h3>
+<p>權限：depadmin、siteadmin。參數：<code>uid</code>（來源提供者，必填）、<code>ou</code>（必填）、<code>q</code>、<code>page_num</code>、<code>page_limit</code>。只列出已上架（<code>c05</code>）的資料，回傳格式同 4.1。缺少參數時回「請選擇機關及資料提供者」。</p>
+<h3 id="414-post-corpustransfersubmit-機關內移轉">4.14 POST <code>corpus.transfer.submit</code> 機關內移轉</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>欄位</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>from_provider_uid</code>、<code>to_provider_uid</code></td>
+<td>來源與目標提供者，不可相同</td>
+</tr>
+<tr>
+<td><code>egov_account</code></td>
+<td>目標機關的 Myegov 帳號（須登記在該機關）</td>
+</tr>
+<tr>
+<td><code>corpus_ids</code></td>
+<td>1～100 筆已上架資料集 id</td>
+</tr>
+</tbody></table>
+</div>
+<ul>
+<li>整批成功或整批失敗。</li>
+<li>移轉<strong>不經審核，前台立即顯示新的聯絡資訊</strong>；識別碼、首次上架時間、訂閱、回饋都保留。</li>
+<li>回傳：<code>{ records: [{ id, revision_id }] }</code></li>
+<li>錯誤：「移轉參數格式錯誤」、「目標資料提供者不存在或已停用」、「Myegov 帳號不屬於目標機關」、409「資料提供者或版本已變更，請重新載入」、403（非同一一級機關、狀態非已上架等）。</li>
+</ul>
+<h3 id="415-get-feedbackcorpuslist-意見回饋列表後台">4.15 GET <code>feedback.corpus.list</code> 意見回饋列表（後台）</h3>
+<p>權限：依角色範圍（provider 只看自己資料集的意見）。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>參數</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>q</code></td>
+<td>比對意見內容</td>
+</tr>
+<tr>
+<td><code>start</code>、<code>end</code></td>
+<td><code>Y-m-d</code>，含結束當天</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>1</code> 未處理、<code>2</code> 處理中（已暫存）、<code>3</code> 已結案</td>
+</tr>
+<tr>
+<td><code>taxonomy</code></td>
+<td><code>文本資料集描述有誤</code>、<code>文本資料集檔案內容有誤</code>、<code>肯定與鼓勵</code>、<code>其他</code></td>
+</tr>
+<tr>
+<td><code>ou</code>、<code>page_num</code>、<code>page_limit</code></td>
+<td><code>page_limit</code> 1～100</td>
+</tr>
+</tbody></table>
+</div>
+<p>回傳：<code>{ total, records: [{ id, corpus_id, title, taxonomy, content, status, unit_id, unit_full_name, created, changed }] }</code>。</p>
+<h3 id="416-get-feedbackcorpusinfo-意見回饋詳目">4.16 GET <code>feedback.corpus.info</code> 意見回饋詳目</h3>
+<p>參數：<code>id</code>。回傳意見內容（<code>user_type</code>、<code>user_email</code>、<code>taxonomy</code>、<code>content</code>、<code>reply_content</code>、<code>status</code>、<code>created</code>、<code>changed</code>）、資料集資訊（<code>title</code>、<code>unit_full_name</code>、<code>member_account</code>），以及處理人員（<code>handler_account</code>、<code>handler_name</code>、<code>handler_role_name</code>，未處理時為 null）。</p>
+<h3 id="417-post-feedbackcorpusreview-暫存或送出回覆">4.17 POST <code>feedback.corpus.review</code> 暫存或送出回覆</h3>
+<p>Body：<code>id</code>、<code>action</code>（<code>save</code> 暫存、<code>send</code> 送出並結案）、<code>reply_content</code>（必填）。</p>
+<ul>
+<li><code>save</code> 後狀態為 2；<code>send</code> 後狀態為 3，並通知會員。</li>
+<li>已結案（狀態 3）的意見不能暫存，也不能再送出（「此意見已結案」），避免重複寄信。</li>
+<li>回傳：<code>{ id, status, changed }</code></li>
+<li>參數有任何錯誤都回「請輸入回復內容」。</li>
+</ul>
+<h3 id="418-get-feedbackcorpusexport-匯出-csv">4.18 GET <code>feedback.corpus.export</code> 匯出 CSV</h3>
+<p>參數同 4.15（不分頁，匯出全部符合條件的資料）。成功時回 CSV 檔（UTF-8 含 BOM），失敗時回 JSON。</p>
+<h2 id="5-前台-api">5. 前台 API</h2>
+<h3 id="51-get-corpuslist-公開列表公開">5.1 GET <code>corpus.list</code> 公開列表（公開）</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>參數</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>q</code></td>
+<td>比對名稱與描述</td>
+</tr>
+<tr>
+<td><code>sort</code></td>
+<td><code>views</code> 瀏覽次數（預設）、<code>latest</code> 最新上架</td>
+</tr>
+<tr>
+<td><code>ou</code></td>
+<td>逗號分隔的機關代碼</td>
+</tr>
+<tr>
+<td><code>domain</code></td>
+<td>應用領域的 <code>tid</code>；<code>other</code> 代表有自訂領域的資料</td>
+</tr>
+<tr>
+<td><code>page_num</code>、<code>page_limit</code></td>
+<td><code>page_limit</code> 1～100</td>
+</tr>
+</tbody></table>
+</div>
+<p>只列出上架中的資料，內容一律取上架版本。</p>
+<p>回傳：<code>{ total, records: [{ id, title, description, open_status, unit_id, unit_full_name, last_published_at, view_count, formats, domains }] }</code></p>
+<ul>
+<li><code>formats</code> 是字串陣列，例如 <code>[&quot;CSV&quot;,&quot;PDF&quot;]</code>，沒有檔案時為 <code>[]</code></li>
+<li><code>domains</code> 是<strong>字串</strong>，以「、」連接，自訂值顯示為「其他」</li>
+</ul>
+<h3 id="52-get-corpusinfo-公開詳目公開">5.2 GET <code>corpus.info</code> 公開詳目（公開）</h3>
+<p>參數：<code>id</code>。下架或不存在時回 404。</p>
+<p>回傳：<code>id</code>、<code>title</code>、<code>description</code>、<code>last_published_at</code>、<code>license_code</code>、<code>license_permanent</code>、<code>license_expiry_year</code>、<code>contact_name</code>、<code>contact_email</code>、<code>contact_phone</code>、<code>open_status</code>、<code>unit_full_name</code>、<code>subscription_count</code>、<code>average_rating</code>（尚無評分時為 null）、<code>terms: [{ kind, name }]</code>、<code>formats</code>（字串陣列，與列表相同，例如 <code>[&quot;CSV&quot;,&quot;PDF&quot;]</code>）。會員登入時另有 <code>my_rating</code>、<code>subscribed</code>。</p>
+<ul>
+<li>不包含檔案清單、收錄期間、發布年份等欄位。</li>
+<li>每次呼叫瀏覽次數加 1。</li>
+</ul>
+<h3 id="53-get-corpusresourcedownload-全檔-zip公開">5.3 GET <code>corpus.resource.download</code> 全檔 ZIP（公開）</h3>
+<p>參數：<code>id</code>。成功時回 ZIP 檔（<code>corpus-&lt;id&gt;.zip</code>，內含上架版本所有檔案）；失敗時回 JSON。</p>
+<ul>
+<li><code>open_status</code> 為 <code>ai_training</code> 時一律回 <code>code: 403</code>、「須經審核通過後方可取得下載連結」，因為 AI 授權申請功能尚未實作。</li>
+</ul>
+<h3 id="531-get-corpusresourcedownloadcheck-下載前檢查公開">5.3.1 GET <code>corpus.resource.download.check</code> 下載前檢查（公開）</h3>
+<p>參數：<code>id</code>。做與 5.3 相同的檢查（上架中、全公開、檔案都存在），但不打包 ZIP、不計入下載次數。</p>
+<ul>
+<li>可下載時回傳 <code>{ downloadable: true }</code>；否則回傳與 5.3 相同的錯誤。</li>
+<li>前台詳目的「下載 ZIP 檔案」按鈕先呼叫這支，成功才導向 5.3 的網址由瀏覽器直接下載（ZIP 可能很大，不經由前端記憶體）；失敗時在頁面顯示 <code>s_message</code>。</li>
+</ul>
+<h3 id="54-post-corpusstarupsert-評分會員">5.4 POST <code>corpus.star.upsert</code> 評分（會員）</h3>
+<p>Body：<code>id</code>、<code>rating</code>（1～5）。回傳：<code>{ subscription_count, average_rating, my_rating, subscribed }</code>。錯誤：「評分須為 1 至 5 顆星」。</p>
+<h3 id="55-post-corpussubscribecorpusunsubscribe會員">5.5 POST <code>corpus.subscribe</code>、<code>corpus.unsubscribe</code>（會員）</h3>
+<p>Body：<code>id</code>。重複呼叫結果相同。回傳同 5.4。</p>
+<h3 id="56-get-corpustermlist公開">5.6 GET <code>corpus.term.list</code>（公開）</h3>
+<p>同 4.7。</p>
+<h3 id="57-get-feedbackcorpuslist-我的意見會員">5.7 GET <code>feedback.corpus.list</code> 我的意見（會員）</h3>
+<p>參數：<code>q</code>、<code>page_num</code>、<code>page_limit</code>。回傳：<code>{ total, records: [{ id, corpus_id, title, taxonomy, created, reply_status }] }</code>，<code>reply_status</code> 為「已回復」或「未回復」。</p>
+<h3 id="58-get-feedbackcorpusinfo-我的意見詳目會員只能看自己的">5.8 GET <code>feedback.corpus.info</code> 我的意見詳目（會員，只能看自己的）</h3>
+<p>參數：<code>id</code>。回傳：<code>id</code>、<code>corpus_id</code>、<code>title</code>、<code>taxonomy</code>、<code>content</code>、<code>created</code>、<code>reply_status</code>、<code>reply_content</code>、<code>reply_time</code>（未回覆時兩者為 null）。</p>
+<h3 id="59-post-feedbackcorpussubmit-送出意見會員需-recaptcha">5.9 POST <code>feedback.corpus.submit</code> 送出意見（會員，需 reCAPTCHA）</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>欄位</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>token</code></td>
+<td>reCAPTCHA token</td>
+</tr>
+<tr>
+<td><code>corpus_id</code></td>
+<td>上架中的資料集 id</td>
+</tr>
+<tr>
+<td><code>user_type</code></td>
+<td><code>應用開發</code>、<code>學術研究</code>、<code>政府機關</code>、<code>其他</code></td>
+</tr>
+<tr>
+<td><code>taxonomy</code></td>
+<td><code>文本資料集描述有誤</code>、<code>文本資料集檔案內容有誤</code>、<code>肯定與鼓勵</code>、<code>其他</code></td>
+</tr>
+<tr>
+<td><code>content</code></td>
+<td>意見內容，必填</td>
+</tr>
+</tbody></table>
+</div>
+<p>回傳：<code>{ id }</code>。會員 email 由系統帶入。</p>
+<p>錯誤：「No Token」、「Token validate fail」、「Token verify has error」（皆 code 401）、「請填寫紅框處必填欄位。」、「會員電子信箱無效，請至新北卡會員系統更新」、404。</p>
+<h2 id="6-既有-api-的變動">6. 既有 API 的變動</h2>
+<ul>
+<li><strong>#745 公告</strong>：前台公告等文章 API（<code>news.*</code> 等）的每筆資料多了 <code>source_type</code>，值為 <code>&quot;corpus&quot;</code> 或 <code>&quot;dataset&quot;</code>；<code>&quot;corpus&quot;</code> 時顯示「文本」標籤。</li>
+<li><strong>#746 資料集詳目</strong>：前台 <code>dataset.info</code>（上架版本）多了 <code>resource_last_modified</code>（<code>Y-m-d H:i:s</code>，無有效值時為空字串），定義與列表的更新時間排序相同。詳目即時計算、列表讀索引，索引延遲時兩者可能暫時不同。</li>
+</ul>
+<h2 id="7-已知問題與注意事項">7. 已知問題與注意事項</h2>
+<p>尚未處理、串接時請留意：</p>
+<ol>
+<li>前台 <code>corpus.info</code> 每次呼叫都會累加瀏覽次數，沒有去重（與既有資料集相同；是否去重待確認）。</li>
+<li>移轉不會檢查目標帳號的角色（規格待確認）。</li>
+<li>錯誤處理：除「完全沒帶 token」外，一律以 <code>success</code> 判斷，不要依賴 HTTP 狀態碼。</li>
+</ol>
+<p>已處理（2026-11-22）：找不到資料改回中文訊息；<code>formats</code> 列表與詳目統一為字串陣列；審核詳目的收錄期間改為 <code>Y-m-d</code>；前台 ZIP 下載先呼叫檢查 API；下架草稿不可編輯；後台編輯頁只在內容有變動時才儲存；已結案的意見不可再送出。</p>
+<p>本文件依程式碼整理，回應範例尚未以實際呼叫逐一核對；串接時若發現不一致，以實際回應為準並回報更新本文件。</p>
+
+</main>
+</div>
+<footer class="site">本頁由 <code>docs/696-corpus-api.md</code> 產生，請修改 md 後重新執行 <code>docs/html/build.mjs</code>。<br><span>新北市資料開放平臺 #696 文本語料專區・內部開發文件</span></footer>
+</body>
+</html>

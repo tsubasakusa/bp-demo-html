@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>#696 文本語料進度與待辦｜#696 文本語料文件</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #004880; --primary-hover: #0065b3; --primary-dark: #002b4d;
+  --focus: #fb0; --info-bg: #e8f4ff; --info-border: #1a9bff;
+  --warning: #ffa90a; --success: #458227; --danger: #ec0303;
+  --text: #090909; --text-muted: #4d4d4d; --border: #ccc; --border-light: #e5e5e5;
+  --bg: #fff; --bg-soft: #f5f7fa; --footer: #292929;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: 1rem; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: "Noto Sans TC", "helvatica", "Arial", sans-serif, "微軟正黑體"; font-size: 16px; line-height: 1.75; display: flex; flex-direction: column; min-height: 100vh; }
+a { color: var(--primary); text-decoration: none; transition: opacity .16s ease-in; }
+a:hover { text-decoration: underline; }
+a:focus, button:focus, summary:focus { outline: none; box-shadow: 0 0 0 3px var(--focus); }
+.skip { position: absolute; left: -999px; } .skip:focus { left: 1rem; top: 1rem; background: #fff; padding: .25rem .5rem; z-index: 10; }
+header.site { background: var(--primary); color: #fff; border-bottom: 4px solid var(--focus); }
+header.site .inner { max-width: 1280px; margin: 0 auto; padding: .875rem 1rem; display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1.5rem; }
+header.site .brand { color: #fff; font-weight: 700; font-size: 1.25rem; letter-spacing: .04em; }
+header.site .brand small { display: block; font-size: .8125rem; font-weight: 400; opacity: .85; letter-spacing: 0; }
+nav.docs { background: var(--primary-dark); }
+nav.docs ul { max-width: 1280px; margin: 0 auto; padding: 0 1rem; list-style: none; display: flex; flex-wrap: wrap; }
+nav.docs a { display: block; color: #fff; padding: .625rem .875rem; font-size: .9375rem; }
+nav.docs a:hover { background: var(--primary-hover); text-decoration: none; }
+nav.docs a[aria-current="page"] { background: #fff; color: var(--primary); font-weight: 700; }
+.layout { flex: 1; width: 100%; max-width: 1280px; margin: 0 auto; padding: 2rem 1rem 3rem; display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 2.5rem; align-items: start; }
+.layout.no-toc { grid-template-columns: minmax(0, 1fr); }
+aside.toc { position: sticky; top: 1rem; max-height: calc(100vh - 2rem); overflow: auto; border-left: 3px solid var(--primary); padding: .25rem 0 .25rem .875rem; font-size: .875rem; }
+aside.toc summary { margin: 0 0 .5rem; font-size: .9375rem; font-weight: 700; color: var(--primary); cursor: pointer; list-style: none; }
+aside.toc summary::-webkit-details-marker { display: none; }
+aside.toc summary::after { content: " ▾"; font-size: .75rem; }
+aside.toc details:not([open]) summary::after { content: " ▸"; }
+aside.toc ul { list-style: none; margin: 0; padding: 0; }
+aside.toc li { margin: .25rem 0; } aside.toc li.l3 { padding-left: 1rem; font-size: .8125rem; }
+aside.toc a { color: var(--text-muted); } aside.toc a:hover { color: var(--primary); }
+main { min-width: 0; }
+.breadcrumb { font-size: .875rem; color: var(--text-muted); margin-bottom: .75rem; }
+h1.page-title { margin: 0 0 1.5rem; font-size: 1.875rem; color: var(--primary); line-height: 1.4; padding-bottom: .75rem; border-bottom: 2px solid var(--primary); }
+main h2 { margin: 2.5rem 0 1rem; font-size: 1.4375rem; color: var(--primary); padding-left: .75rem; border-left: 5px solid var(--primary); line-height: 1.4; }
+main h3 { margin: 2rem 0 .75rem; font-size: 1.1875rem; color: var(--primary-dark); }
+main h4 { margin: 1.5rem 0 .5rem; font-size: 1.0625rem; }
+main p, main ul, main ol { margin: .75rem 0; }
+main ul, main ol { padding-left: 1.5rem; }
+main li { margin: .25rem 0; }
+main li:has(> input[type=checkbox]) { list-style: none; margin-left: -1.5rem; }
+main input[type=checkbox] { width: 1rem; height: 1rem; margin: 0 .5rem 0 0; vertical-align: -2px; accent-color: var(--success); }
+main strong { color: var(--primary-dark); }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .875em; background: var(--bg-soft); border: 1px solid var(--border-light); border-radius: 4px; padding: .05em .35em; word-break: break-word; }
+pre { background: #1f2933; color: #f5f7fa; border-radius: 6px; padding: 1rem 1.25rem; overflow-x: auto; line-height: 1.6; }
+pre code { background: none; border: 0; padding: 0; color: inherit; font-size: .875rem; word-break: normal; }
+blockquote { margin: 1rem 0; padding: .75rem 1rem; background: var(--info-bg); border-left: 4px solid var(--info-border); color: var(--primary-dark); }
+blockquote p { margin: .25rem 0; }
+.table-wrap { overflow-x: auto; margin: 1rem 0; }
+table { border-collapse: collapse; width: 100%; font-size: .9375rem; }
+th, td { border: 1px solid var(--border); padding: .5rem .75rem; text-align: left; vertical-align: top; }
+thead th { background: var(--primary); color: #fff; font-weight: 700; white-space: nowrap; }
+tbody tr:nth-child(even) { background: var(--bg-soft); }
+hr { border: 0; border-top: 1px solid var(--border); margin: 2rem 0; }
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+.card { display: block; border: 1px solid var(--border); border-top: 4px solid var(--primary); border-radius: 4px; padding: 1rem 1.25rem; color: var(--text); background: #fff; transition: box-shadow .16s ease-in; }
+.card:hover { text-decoration: none; box-shadow: 0 4px 12px rgba(9, 9, 9, .15); }
+.card strong { display: block; color: var(--primary); font-size: 1.0625rem; margin-bottom: .25rem; }
+.card span { color: var(--text-muted); font-size: .875rem; }
+.card small { display: block; margin-top: .5rem; color: var(--text-muted); font-size: .75rem; }
+footer.site { background: var(--footer); color: #fff; text-align: center; padding: 1.25rem 1rem; font-size: .8125rem; line-height: 1.6; }
+footer.site span { opacity: .8; }
+@media (max-width: 960px) {
+  .layout { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; padding-top: 1.25rem; }
+  aside.toc { position: static; max-height: none; background: var(--bg-soft); padding: .5rem .875rem; }
+  aside.toc summary { margin: 0; }
+  aside.toc details[open] summary { margin-bottom: .5rem; }
+  nav.docs ul { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  nav.docs a { white-space: nowrap; }
+  h1.page-title { font-size: 1.5rem; }
+}
+@media print {
+  header.site, nav.docs, aside.toc, footer.site { display: none; }
+  .layout { display: block; padding: 0; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#content">跳至主要內容</a>
+<header class="site"><div class="inner"><a class="brand" href="index.html">新北市資料開放平臺<small>#696 文本語料專區・開發文件</small></a></div></header>
+<nav class="docs" aria-label="文件選單"><ul><li><a href="index.html">文件首頁</a></li><li><a href="696-status.html" aria-current="page">文本語料進度與待辦</a></li><li><a href="696-corpus-api.html">文本語料 API 說明（前端串接用）</a></li><li><a href="696-corpus-development-plan.html">#744–#752 文本語料開發計畫</a></li><li><a href="696-corpus-publication-integration-checklist.html">文本資料集上架整合測試清單</a></li><li><a href="696-handoff.html">文本語料開發交接</a></li><li><a href="696-local-testing-data-preparation.html">本機測試資料準備</a></li></ul></nav>
+<div class="layout">
+<aside class="toc" aria-label="本頁目錄"><details open><summary>本頁目錄</summary><ul><li class="l2"><a href="#目前狀態">目前狀態</a></li><li class="l2"><a href="#已完成的驗證">已完成的驗證</a></li><li class="l2"><a href="#待辦">待辦</a></li><li class="l3"><a href="#部署優先">部署（優先）</a></li><li class="l3"><a href="#可直接進行的驗證">可直接進行的驗證</a></li><li class="l3"><a href="#等待外部資料">等待外部資料</a></li><li class="l3"><a href="#收尾">收尾</a></li><li class="l2"><a href="#本機開發環境">本機開發環境</a></li><li class="l2"><a href="#repo-既有問題非-696於本機建置時發現">repo 既有問題（非 #696，於本機建置時發現）</a></li></ul></details></aside>
+<script>if (window.matchMedia('(max-width: 960px)').matches) document.querySelector('aside.toc details').removeAttribute('open')</script>
+<main id="content">
+<div class="breadcrumb"><a href="index.html">文件首頁</a> ／ #696 文本語料進度與待辦</div>
+<h1 class="page-title">#696 文本語料進度與待辦</h1>
+<p>更新日期：2026-11-22。本文件記錄目前完成的項目、驗證結果與待辦；需求與設計見 <a href="696-corpus-development-plan.html">開發計畫</a>，前端串接見 <a href="696-corpus-api.html">API 說明</a>。</p>
+<h2 id="目前狀態">目前狀態</h2>
+<ul>
+<li>分支 <code>feature/696-corpus-research</code> 已推送至遠端，最新為 <code>e99529ba feat(corpus): 新增文本語料專區初版 (#696)</code>；與 master（<code>b66ce874</code>）之間沒有落差。</li>
+<li>此分支已加入 testing 部署（<code>32ebb89f</code>），<strong>每次一般 push 都會部署到 testing</strong>；只想推程式不部署時加 <code>-o ci.skip</code>。</li>
+<li>2026-11-18 推送 <code>e99529ba</code> 時已觸發 testing 部署，pipeline 結果尚未確認。</li>
+<li>初版涵蓋 #744–#752：6 支 migration、後端 API、前後臺頁面、兩階段審核、多檔、移轉、意見回饋，以及公告與通知的事件處理器。</li>
+</ul>
+<h2 id="已完成的驗證">已完成的驗證</h2>
+<p>離線單元測試：<code>cd backend &amp;&amp; vendor/bin/phpunit tests/Proj --filter &#39;Corpus|ResourceLastModified|FrontMemberAuth&#39;</code>，157 項測試、386 個斷言全部通過。</p>
+<p>本機整合測試（2026-11-10，空資料庫加開發用假資料，直接呼叫 API）：</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>項目</th>
+<th>結果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>115 支 migration 由空庫套用（含 #696 的 6 支）</td>
+<td>通過（另需修補一支既有 migration，見下方「repo 既有問題」）</td>
+</tr>
+<tr>
+<td>新增草稿、分類、上傳、送審、機關同意、系統同意後即時上架</td>
+<td>通過</td>
+</tr>
+<tr>
+<td>權限：同機關非指定審核人、跨機關、提供者自審、跳過機關審核</td>
+<td>皆被拒絕</td>
+</tr>
+<tr>
+<td>退回（須填原因）、抽回、重新送審、取消申請</td>
+<td>通過</td>
+</tr>
+<tr>
+<td>修改已上架資料：審核期間前臺維持舊版，同意後切換；同名替換、新增檔案</td>
+<td>通過</td>
+</tr>
+<tr>
+<td>下架：前臺列表、詳目、下載皆不再提供</td>
+<td>通過</td>
+</tr>
+<tr>
+<td>以舊 <code>revision_id</code> 儲存被拒（循序模擬）</td>
+<td>通過</td>
+</tr>
+<tr>
+<td>第 21 個檔案、超過 100 MB、<code>.exe</code>、名稱重複、描述同名稱</td>
+<td>皆被拒絕</td>
+</tr>
+<tr>
+<td>全公開 ZIP 下載、AI 限制資料直接呼叫下載被拒、「其他 [育兒]」</td>
+<td>通過</td>
+</tr>
+<tr>
+<td>機關內移轉（保留首次上架時間、記錄歷程）、跨機關移轉被拒</td>
+<td>通過</td>
+</tr>
+<tr>
+<td>公告事件：新增、下架各一筆，修改不產生</td>
+<td>通過</td>
+</tr>
+<tr>
+<td>意見回饋：會員送出、後臺列表與詳目、匯出 CSV、跨機關不可回覆</td>
+<td>通過（reCAPTCHA 以開發環境開關略過）</td>
+</tr>
+</tbody></table>
+</div>
+<p>瀏覽器（headless Chromium）實際開啟前臺列表、詳目與後臺編輯、新增、審核、移轉、意見回饋、預覽、歷程頁，無 JS 或 API 錯誤；後臺僅以系統管理者 <code>b103</code> 操作。</p>
+<p>已修正：<code>CorpusStore::termOptions()</code> 原本寫 <code>COLLATE &quot;C&quot;</code>，dibi 會轉成字串 <code>&#39;C&#39;</code> 造成 PostgreSQL 語法錯誤，分類 API 全數失敗；已改為 <code>COLLATE [C]</code>。</p>
+<h2 id="待辦">待辦</h2>
+<h3 id="部署優先">部署（優先）</h3>
+<ul>
+<li><input disabled="" type="checkbox"> 到 GitLab 確認 <code>feature/696-corpus-research</code> 在 testing 的 pipeline 結果。</li>
+<li><input disabled="" type="checkbox"> 在 testing 執行 #696 的 6 支 migration；CI 不會自動執行，未執行時文本語料頁面會出錯。</li>
+<li><input disabled="" type="checkbox"> 確認 testing 的 CI 變數（<code>CONFIG_SYSTEM</code> 等）已有 #696 需要的設定。</li>
+<li><input disabled="" type="checkbox"> 通知團隊 testing 目前部署的是此分支，master 再次部署時會覆蓋。</li>
+</ul>
+<h3 id="可直接進行的驗證">可直接進行的驗證</h3>
+<ul>
+<li><input disabled="" type="checkbox"> 2026-11-22 依 API 檢視修正的 7 項（中文錯誤訊息、<code>formats</code> 陣列、日期格式、下載前檢查、下架草稿不可編輯、編輯頁減少版本、已結案不可再送出）：已通過離線測試與前端編譯檢查，尚未在本機環境以 API 與瀏覽器實測。</li>
+<li><input disabled="" type="checkbox"> migration 回滾，以及已有資料時的情境。</li>
+<li><input disabled="" type="checkbox"> 真正同時送出的並行操作；資料庫交易或檔案儲存失敗後的回復。</li>
+<li><input disabled="" type="checkbox"> 機關管理者、資料提供者在瀏覽器實際操作（目前只以系統管理者點過畫面，其他角色只驗證了 API）。</li>
+<li><input disabled="" type="checkbox"> #746 詳目時間：一般資源、舊系統 API／other、無資源、多資源。</li>
+<li><input disabled="" type="checkbox"> 前臺搜尋條件組合、排序、分頁；資料查詢與標籤雲的文本提示文字。</li>
+<li><input disabled="" type="checkbox"> 多筆資料一次移轉及整批回滾。</li>
+<li><input disabled="" type="checkbox"> 意見回饋回覆的「送出」與結案通知。</li>
+</ul>
+<h3 id="等待外部資料">等待外部資料</h3>
+<ul>
+<li><input disabled="" type="checkbox"> 公告與信件範本：等 111 年「系統自動發布公告盤點」與「系統通知信件盤點」。範本確認後，再設定 <code>system.corpus.announcement_templates</code>、<code>system.corpus.feedback_notification_templates</code>。</li>
+<li><input disabled="" type="checkbox"> 排程：範本確認並實測後，將 <code>publishCorpusAnnouncements.php</code>、<code>queueCorpusFeedbackNotifications.php</code> 加入 cron（目前未加入）。</li>
+<li><input disabled="" type="checkbox"> #752「待確認」狀態的定義與流轉：等 SA 回覆。</li>
+<li><input disabled="" type="checkbox"> 歷史檔案清理：保留規則等 PM 確認。</li>
+</ul>
+<h3 id="收尾">收尾</h3>
+<ul>
+<li><input disabled="" type="checkbox"> 依本文件更新 <a href="696-corpus-development-plan.html">開發計畫</a> 的待辦勾選與 <a href="696-corpus-publication-integration-checklist.html">整合測試清單</a>，並回寫 #696。</li>
+<li><input disabled="" type="checkbox"> 合併回 master 時，移除 <code>.gitlab-ci.yml</code> 中為此分支加的 testing 部署設定。</li>
+</ul>
+<p>後續階段（不在本次範圍）：AI 應用申請與授權下載、五張語料報表、會員訂閱清單與異動通知。</p>
+<h2 id="本機開發環境">本機開發環境</h2>
+<p>位置：repo 外的 <code>~/project/ntpc-od-696-dev/</code>，原始碼以唯讀方式掛載進容器，不會寫入工作樹。</p>
+<pre><code class="language-bash">cd ~/project/ntpc-od-696-dev
+./up.sh all        # 前臺 http://localhost:3000/corpus、後臺 http://localhost:5173
+./reset-db.sh      # 重建空資料庫
+</code></pre>
+<ul>
+<li>需要 Docker Desktop 執行中並開啟 WSL 整合；後臺第一次安裝需在 <code>generated/backstage.npmrc</code> 放入可讀取 <code>RD/bp-npm</code> 套件的 token。</li>
+<li>後臺登入頁按「取得token並登入」即以系統管理者 <code>b103</code> 登入；另有 <code>dev_dep_a</code>、<code>dev_dep_a2</code>、<code>dev_prov_a</code>（機關 A）與 <code>dev_dep_b</code>（機關 B）可透過 <code>POST /api/jwt/demo/login</code> 取得 token。</li>
+<li>流程測試腳本：<code>e2e/flow.py</code>、<code>e2e/extras.py</code>。</li>
+<li>開發環境限定的調整都在 <code>patch-migrations.py</code> 與 <code>gen-config.py</code>：修補舊 migration 與 seeder、補齊設定檔缺少的欄位、reCAPTCHA 略過開關（僅 <code>dev</code>／<code>testing</code> 生效）、API 與前臺網址設定。</li>
+</ul>
+<h2 id="repo-既有問題非-696於本機建置時發現">repo 既有問題（非 #696，於本機建置時發現）</h2>
+<ul>
+<li><code>20220907021934_modify_feedback</code> 重複建立 <code>feedback.created</code> 索引，空資料庫無法完成 migration。</li>
+<li>所有 seeder 的 <code>run()</code> 缺少 <code>: void</code>，與目前 Phinx 版本不相容；<code>DefaltUserSeeder</code> 使用已不存在的 <code>users.org_id</code>。</li>
+<li><code>RoleSeeder</code> 的角色 ID 與 <code>App\Model\Role</code> 不同，空資料庫時 #696 的權限 migration 找不到角色，不會建立授權。</li>
+<li><code>system.json.example</code> 缺少 <code>file_storage_folder.content_folder</code>、<code>application_folder</code>；<code>mailer.json.example</code> 缺少 <code>default_sender</code>。</li>
+<li><code>frontend/backstage/.npmrc</code> 被提交的 token 已失效（401），應移出版本控制。</li>
+<li><code>backend/app/Module/Cache/README.md</code> 含內網 Redis 連線與密碼，應移除並更換。</li>
+</ul>
+
+</main>
+</div>
+<footer class="site">本頁由 <code>docs/696-status.md</code> 產生，請修改 md 後重新執行 <code>docs/html/build.mjs</code>。<br><span>新北市資料開放平臺 #696 文本語料專區・內部開發文件</span></footer>
+</body>
+</html>

@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>#696：#744–#752 文本語料開發計畫｜#696 文本語料文件</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #004880; --primary-hover: #0065b3; --primary-dark: #002b4d;
+  --focus: #fb0; --info-bg: #e8f4ff; --info-border: #1a9bff;
+  --warning: #ffa90a; --success: #458227; --danger: #ec0303;
+  --text: #090909; --text-muted: #4d4d4d; --border: #ccc; --border-light: #e5e5e5;
+  --bg: #fff; --bg-soft: #f5f7fa; --footer: #292929;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: 1rem; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: "Noto Sans TC", "helvatica", "Arial", sans-serif, "微軟正黑體"; font-size: 16px; line-height: 1.75; display: flex; flex-direction: column; min-height: 100vh; }
+a { color: var(--primary); text-decoration: none; transition: opacity .16s ease-in; }
+a:hover { text-decoration: underline; }
+a:focus, button:focus, summary:focus { outline: none; box-shadow: 0 0 0 3px var(--focus); }
+.skip { position: absolute; left: -999px; } .skip:focus { left: 1rem; top: 1rem; background: #fff; padding: .25rem .5rem; z-index: 10; }
+header.site { background: var(--primary); color: #fff; border-bottom: 4px solid var(--focus); }
+header.site .inner { max-width: 1280px; margin: 0 auto; padding: .875rem 1rem; display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1.5rem; }
+header.site .brand { color: #fff; font-weight: 700; font-size: 1.25rem; letter-spacing: .04em; }
+header.site .brand small { display: block; font-size: .8125rem; font-weight: 400; opacity: .85; letter-spacing: 0; }
+nav.docs { background: var(--primary-dark); }
+nav.docs ul { max-width: 1280px; margin: 0 auto; padding: 0 1rem; list-style: none; display: flex; flex-wrap: wrap; }
+nav.docs a { display: block; color: #fff; padding: .625rem .875rem; font-size: .9375rem; }
+nav.docs a:hover { background: var(--primary-hover); text-decoration: none; }
+nav.docs a[aria-current="page"] { background: #fff; color: var(--primary); font-weight: 700; }
+.layout { flex: 1; width: 100%; max-width: 1280px; margin: 0 auto; padding: 2rem 1rem 3rem; display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 2.5rem; align-items: start; }
+.layout.no-toc { grid-template-columns: minmax(0, 1fr); }
+aside.toc { position: sticky; top: 1rem; max-height: calc(100vh - 2rem); overflow: auto; border-left: 3px solid var(--primary); padding: .25rem 0 .25rem .875rem; font-size: .875rem; }
+aside.toc summary { margin: 0 0 .5rem; font-size: .9375rem; font-weight: 700; color: var(--primary); cursor: pointer; list-style: none; }
+aside.toc summary::-webkit-details-marker { display: none; }
+aside.toc summary::after { content: " ▾"; font-size: .75rem; }
+aside.toc details:not([open]) summary::after { content: " ▸"; }
+aside.toc ul { list-style: none; margin: 0; padding: 0; }
+aside.toc li { margin: .25rem 0; } aside.toc li.l3 { padding-left: 1rem; font-size: .8125rem; }
+aside.toc a { color: var(--text-muted); } aside.toc a:hover { color: var(--primary); }
+main { min-width: 0; }
+.breadcrumb { font-size: .875rem; color: var(--text-muted); margin-bottom: .75rem; }
+h1.page-title { margin: 0 0 1.5rem; font-size: 1.875rem; color: var(--primary); line-height: 1.4; padding-bottom: .75rem; border-bottom: 2px solid var(--primary); }
+main h2 { margin: 2.5rem 0 1rem; font-size: 1.4375rem; color: var(--primary); padding-left: .75rem; border-left: 5px solid var(--primary); line-height: 1.4; }
+main h3 { margin: 2rem 0 .75rem; font-size: 1.1875rem; color: var(--primary-dark); }
+main h4 { margin: 1.5rem 0 .5rem; font-size: 1.0625rem; }
+main p, main ul, main ol { margin: .75rem 0; }
+main ul, main ol { padding-left: 1.5rem; }
+main li { margin: .25rem 0; }
+main li:has(> input[type=checkbox]) { list-style: none; margin-left: -1.5rem; }
+main input[type=checkbox] { width: 1rem; height: 1rem; margin: 0 .5rem 0 0; vertical-align: -2px; accent-color: var(--success); }
+main strong { color: var(--primary-dark); }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .875em; background: var(--bg-soft); border: 1px solid var(--border-light); border-radius: 4px; padding: .05em .35em; word-break: break-word; }
+pre { background: #1f2933; color: #f5f7fa; border-radius: 6px; padding: 1rem 1.25rem; overflow-x: auto; line-height: 1.6; }
+pre code { background: none; border: 0; padding: 0; color: inherit; font-size: .875rem; word-break: normal; }
+blockquote { margin: 1rem 0; padding: .75rem 1rem; background: var(--info-bg); border-left: 4px solid var(--info-border); color: var(--primary-dark); }
+blockquote p { margin: .25rem 0; }
+.table-wrap { overflow-x: auto; margin: 1rem 0; }
+table { border-collapse: collapse; width: 100%; font-size: .9375rem; }
+th, td { border: 1px solid var(--border); padding: .5rem .75rem; text-align: left; vertical-align: top; }
+thead th { background: var(--primary); color: #fff; font-weight: 700; white-space: nowrap; }
+tbody tr:nth-child(even) { background: var(--bg-soft); }
+hr { border: 0; border-top: 1px solid var(--border); margin: 2rem 0; }
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+.card { display: block; border: 1px solid var(--border); border-top: 4px solid var(--primary); border-radius: 4px; padding: 1rem 1.25rem; color: var(--text); background: #fff; transition: box-shadow .16s ease-in; }
+.card:hover { text-decoration: none; box-shadow: 0 4px 12px rgba(9, 9, 9, .15); }
+.card strong { display: block; color: var(--primary); font-size: 1.0625rem; margin-bottom: .25rem; }
+.card span { color: var(--text-muted); font-size: .875rem; }
+.card small { display: block; margin-top: .5rem; color: var(--text-muted); font-size: .75rem; }
+footer.site { background: var(--footer); color: #fff; text-align: center; padding: 1.25rem 1rem; font-size: .8125rem; line-height: 1.6; }
+footer.site span { opacity: .8; }
+@media (max-width: 960px) {
+  .layout { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; padding-top: 1.25rem; }
+  aside.toc { position: static; max-height: none; background: var(--bg-soft); padding: .5rem .875rem; }
+  aside.toc summary { margin: 0; }
+  aside.toc details[open] summary { margin-bottom: .5rem; }
+  nav.docs ul { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  nav.docs a { white-space: nowrap; }
+  h1.page-title { font-size: 1.5rem; }
+}
+@media print {
+  header.site, nav.docs, aside.toc, footer.site { display: none; }
+  .layout { display: block; padding: 0; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#content">跳至主要內容</a>
+<header class="site"><div class="inner"><a class="brand" href="index.html">新北市資料開放平臺<small>#696 文本語料專區・開發文件</small></a></div></header>
+<nav class="docs" aria-label="文件選單"><ul><li><a href="index.html">文件首頁</a></li><li><a href="696-status.html">文本語料進度與待辦</a></li><li><a href="696-corpus-api.html">文本語料 API 說明（前端串接用）</a></li><li><a href="696-corpus-development-plan.html" aria-current="page">#744–#752 文本語料開發計畫</a></li><li><a href="696-corpus-publication-integration-checklist.html">文本資料集上架整合測試清單</a></li><li><a href="696-handoff.html">文本語料開發交接</a></li><li><a href="696-local-testing-data-preparation.html">本機測試資料準備</a></li></ul></nav>
+<div class="layout">
+<aside class="toc" aria-label="本頁目錄"><details open><summary>本頁目錄</summary><ul><li class="l2"><a href="#目的與進度">目的與進度</a></li><li class="l2"><a href="#需求依據與優先順序">需求依據與優先順序</a></li><li class="l2"><a href="#已確認的共通規則">已確認的共通規則</a></li><li class="l2"><a href="#待確認事項與暫行處理">待確認事項與暫行處理</a></li><li class="l2"><a href="#資料設計">資料設計</a></li><li class="l2"><a href="#api-設計">API 設計</a></li><li class="l2"><a href="#開發順序與待辦">開發順序與待辦</a></li><li class="l2"><a href="#驗證與完成條件">驗證與完成條件</a></li></ul></details></aside>
+<script>if (window.matchMedia('(max-width: 960px)').matches) document.querySelector('aside.toc details').removeAttribute('open')</script>
+<main id="content">
+<div class="breadcrumb"><a href="index.html">文件首頁</a> ／ #696：#744–#752 文本語料開發計畫</div>
+<h1 class="page-title">#696：#744–#752 文本語料開發計畫</h1>
+<h2 id="目的與進度">目的與進度</h2>
+<p>在現有新北開放資料平臺新增獨立的文本語料資料與功能，完成 #744–#752 的第一階段需求。此文件記錄資料表、API、開發順序及驗證方式；實作時同步更新各待辦與 #696。</p>
+<p>目前位於 <code>feature/696-corpus-research</code>。#746 的 API 與畫面已先行修改，時間判斷單元測試已執行，但尚未完成資料庫及前臺整合驗證。語料核心及會員互動資料表、預設詞彙已有第一版 migration；後臺草稿、逐檔管理、詞彙、歷程及審核 API 已有第一版，草稿與多檔編輯採交易及資料範圍檢查。前臺公開列表、詳目、公開 ZIP 下載、會員評分及訂閱 API 與既有資料查詢／標籤雲排除文本提示已有初版；AI 限制資料目前拒絕下載，待後續申請審核功能完成再接授權。第二關公告模板、排程及歷史檔案清理流程尚未完成；migration 和現有 API 尚未在 PostgreSQL 實際整合驗證。</p>
+<h2 id="需求依據與優先順序">需求依據與優先順序</h2>
+<ul>
+<li>#744：前臺文本語料專區、資料查詢與標籤雲的提示。</li>
+<li>#745：既有新增／異動公告顯示文本標籤；公告產生由語料審核流程觸發。</li>
+<li>#746：既有資料集詳目顯示與列表「更新時間」排序相同定義的資料資源更新時間。</li>
+<li>#747、#752：會員文本意見回饋及後臺回覆管理。</li>
+<li>#748：本階段的文本資料集編輯、審核、移轉、意見回饋四項角色功能權限。</li>
+<li>#749、#750、#751：文本資料集編輯、多檔、審核及移轉。</li>
+<li>以使用者後續確認和各分項最新規格為準：#696 舊留言的單檔、250 MB 與部分公告內容已過時；#745 舊留言的「修改後產生異動公告」也已由 #750 的最新確認修正。</li>
+</ul>
+<h2 id="已確認的共通規則">已確認的共通規則</h2>
+<ul>
+<li>語料資料與現有 OD 資料集分開存取，不將語料 ID 放入依賴 <code>package</code> 的既有訂閱、回饋、評分或統計查詢；原 OD 五張報表不計入語料。</li>
+<li>審核流程為資料提供者送審 → 被指定的同一級機關審核人員審核 → 系統管理者審核；新上架、修改及下架經審核後即時生效，不解析檔案、不匯入 DataStore、不執行資料轉換。</li>
+<li>一個語料集最多 20 個檔案，每檔上限 100 MB，格式為 PDF、ODT、JSON、XML、TXT、CSV。編輯頁以清單新增、移除或替換個別資源；審核頁確認檔案並可下載前次架上檔案。</li>
+<li>修改送審期間，前臺持續使用舊的架上版本。發布成功後整組版本生效；資料歷程保留操作紀錄，不要求永久保存全部歷史原始檔。</li>
+<li>新增核准產生文本資料集新增公告；修改核准不產生公告；下架核准產生文本資料集異動公告。公告內容依「系統自動發布公告盤點」；通知內容依「系統通知信件盤點」。</li>
+<li>全公開語料可直接下載 ZIP；僅授權 AI 訓練使用的語料必須通過相應申請審核才能下載。AI 申請尚未實作時，下載 API 應拒絕未經授權的請求；未登入畫面先顯示規格指定的純文字。</li>
+<li>保留 eGov 帳號欄位供未來使用；目前不實作數發部同步。移轉時目標聯絡人及 Myegov 帳號分別選擇，無須互相綁定。</li>
+<li>資料管理者管理自己提供的語料；機關管理者管理同一級機關；系統管理者管理全部。機關審核須同時符合機關及被指定審核人條件；系統管理者可查看機關審核中的資料，但僅能審核系統管理者審核中資料。</li>
+<li>會員回饋來自新北卡會員。意見分類使用「文本資料集描述有誤」、「文本資料集檔案內容有誤」、「肯定與鼓勵」、「其他」；後臺回覆暫存及送出均更新 <code>changed</code>。會員前臺顯示已結案為「已回復」，其他未結案狀態為「未回復」。</li>
+</ul>
+<h2 id="待確認事項與暫行處理">待確認事項與暫行處理</h2>
+<ol>
+<li>#752「待確認」狀態的定義與流轉仍由使用者向 SA 確認。先設計可擴充狀態欄位；既有已確認的未處理、處理中、已結案流程可先開發，不假設「待確認」的觸發方式。</li>
+<li>「其他」為共通分類；各資料集版本另保存使用者輸入的補充名稱。前臺進階搜尋選「其他」可查到所有使用該分類的資料集；列表顯示「其他」，詳目顯示例如「其他 [育兒]」，後臺預覽及審核顯示同樣的補充名稱。補充名稱不作為共用篩選選項。</li>
+<li>已上架與待審多檔的比較及歷史實體檔保留細節仍須依 PM 確認；實作至少維持架上與待審隔離、支援審核下載前次架上檔，並避免永久保留所有歷史檔的假設。</li>
+<li>訂閱異動通知標註後續階段；#744 的訂閱與取消按鈕及訂閱數先納入本階段，會員訂閱清單及提示、AI 應用申請和五張語料報表依 #748 後續階段處理。實際通知對象、內容與時機依盤點表及後續確認。</li>
+<li>使用者已確認「交通運輪／綠色永績」為筆誤；應用領域名稱使用「交通運輸／綠色永續」。</li>
+<li>會員文本回饋的提交、本人列表及詳目，以及後臺列表、詳目、暫存、回覆及 CSV 匯出 API 已有初版；會員列表、詳目及後臺列表、查看、回覆畫面也已建立。提交及回覆會保存通知事件，寄信佇列處理器已有初版；信件模板、排程及整合驗證尚未完成，不可視為 #747／#752 完成。</li>
+<li>第一階段四項文本語料角色功能已新增權限 migration；後臺選單依模組及功能名稱共同判斷，避免與既有同名「意見回饋管理」混淆。四個選單入口及路由已有初版；須在真實資料庫驗證既有角色設定及回滾。</li>
+<li>前臺文本語料列表頁、詳目頁及桌面／手機選單入口已有初版；十個應用領域已有個別圖示，列表篩選／排序／頁碼會保存在網址。AI 應用申請連結、完整互動及瀏覽器驗證尚待完成；環境目前缺少 Nuxt 建置依賴。</li>
+<li>第二關審核已可切換架上版本，新增及下架在同一交易寫入 <code>corpus_publication_event</code>，修改不產生公告事件；前臺公告 API 與新增／異動公告列表已支援依事件關聯顯示文本標籤。事件處理器已有初版，但公告範本與排程尚未設定、資料庫交易尚未實測，不能部署或視為 #745／#750 完成。</li>
+<li>後臺文本資料集列表、新增／編輯、預覽、歷程、下架申請、抽回、取消申請、審核及移轉畫面已有初版；移轉頁及資料集／審核／回饋列表已接四層機關及過濾單位。前端建置與實機操作尚未驗證；新增／編輯目前以各 API 逐步保存版本，需驗證中途失敗後的恢復與多檔操作。</li>
+</ol>
+<p>公開檔案格式的程式碼檢查：列表先選 <code>published_revision_id</code>，再以該版本關聯資源計算格式；詳目也使用 <code>published_revision_id</code>。修改草稿期間應只顯示上架版本格式，實際查詢結果仍待資料庫整合驗證。</p>
+<p>審核頁以資源 ID 集合比較工作版與上架版，因此新增、刪除及同名替換都會顯示前次上架檔案清單及下載入口；仍需以實際多檔操作驗證版本切換和下載授權。</p>
+<p>後臺列表欄位的程式碼檢查：編輯、審核及意見回饋列表皆將機關完整名稱拆成「提供機關」與「提供科室」兩欄；審核列表依角色和審核階段決定是否顯示操作按鈕。實際組織資料與權限仍需環境驗證。</p>
+<p>上傳大小的設定檢查：後臺 staging／production PHP 設定與 Apache SSL 設定分別允許 250M 及 250 MiB 請求，程式每次只上傳一個檔案並限制 100 MiB，設定檔名目上足以容納單次請求；尚未確認實際環境的生效設定、代理伺服器限制或 100 MiB 邊界上傳。</p>
+<p>建置環境補充：上述依賴限制指本次開發工作區，不代表測試或正式環境。前臺 README 記載在專案目錄執行 <code>npm install</code>、<code>npm run dev</code>；後臺 README 記載 <code>npm i</code>，其 lockfile 的 <code>@blueplanet/bpgcms-core@2.0.1</code> 指向 GitLab 專案 359 的 npm package registry。README 另有較舊的 bpnpm／nrm 說明，與目前 lockfile 指向不同，實際安裝仍需以現行 registry 權限與專案設定確認。本工作區的離線 npm 快取不足以完成安裝。</p>
+<p>專案 Dockerfile 均使用 Node 24；建置時先依部署環境複製相應 <code>.env</code>，後臺 <code>npm ci</code> 由 BuildKit secret 提供 CI job token。這是 CI 的現行作法；本機建置需要可存取相同 npm package registry 的現有授權，無需將憑證寫入文件或留言。</p>
+<p>本機初始化評估（尚未執行）：開發文件要求建立主資料庫與 Datastore 兩個資料庫。既有 <code>RoleSeeder</code> 使用的角色 ID 與 <code>App\Model\Role</code> 的新北角色 ID 不一致，且先 migrate 後 seed 時，文本角色權限 migration 不會為尚不存在的角色建立關聯；必須補足符合新北角色的測試資料與權限，不能假設舊文件提供完整初始化。工作區內 Docker Desktop 的 WSL 整合目前未啟用，前後臺依賴亦未完整安裝。若準備 testing 資料副本，需使用適合開發的資料並避免包含正式個資。</p>
+<p>使用 testing 副本建立獨立環境前，參考 <a href="696-local-testing-data-preparation.html">本機測試資料準備清單</a>；實際匯出、匯入與整合測試均尚未執行。</p>
+<h2 id="資料設計">資料設計</h2>
+<p>表名為預定命名，migration 與程式使用時保持一致。所有識別碼使用現有專案慣用的 UUID；狀態變更與公開版本切換須在交易內執行，API 對版本、所屬語料與操作身分交叉檢核。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>資料表</th>
+<th>主要欄位與用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>corpus</code></td>
+<td>語料 ID、目前提供者與機關、工作版本 ID、架上版本 ID、狀態與狀態更新時間、首次上架時間、最近一次上架時間、建立／更新時間。已下架後保留識別，供回饋及歷程關聯。</td>
+</tr>
+<tr>
+<td><code>corpus_revision</code></td>
+<td>版本 ID、語料 ID、名稱、描述、授權及期限、eGov 帳號、提供者／對外聯絡資料、收錄日期、發布年份、網址、空間範圍、開放狀態、補充說明及建立人／時間。草稿可儲存未完成欄位；送審時執行完整必填與名稱唯一檢核。</td>
+</tr>
+<tr>
+<td><code>corpus_title_claim</code></td>
+<td>名稱與語料的唯一占用關係；保留架上及工作版使用中的名稱，避免不同語料並行送審時取得相同名稱。草稿取消或版本替換後，由交易流程釋放不再使用的名稱。</td>
+</tr>
+<tr>
+<td><code>corpus_history</code></td>
+<td>語料、版本、前後狀態、動作、操作人、時間及修改／下架／退回／移轉說明；支援歷程及最近一次已上架時間查詢。</td>
+</tr>
+<tr>
+<td><code>corpus_publication_event</code></td>
+<td>新增上架／下架公告事件、語料與版本、下架原因、處理狀態與文章關聯；與第二關版本切換同交易寫入。事件處理與重試已有初版，公告模板及實際資料庫驗證尚待完成。</td>
+</tr>
+<tr>
+<td><code>corpus_resource</code></td>
+<td>檔案 ID、語料 ID、原檔名、格式、媒體類型、大小、不可由使用者控制的儲存識別、上傳人及時間。替換檔案以獨立檔案識別保存，避免覆蓋架上檔。</td>
+</tr>
+<tr>
+<td><code>corpus_resource_revision</code></td>
+<td>版本與檔案的關聯及顯示順序；支援同一檔案被工作版及架上版引用、個別新增／移除／替換。需確保版本與檔案屬於同一語料。</td>
+</tr>
+<tr>
+<td><code>corpus_term_revision</code></td>
+<td>版本與分類關聯，支援文本資料類型、應用領域、語系多選及每類一筆自訂「其他」。預設選項評估沿用 <code>vocabulary</code>／<code>taxonomy_term</code>；自訂值記錄建立者及內容，不污染共用選項。</td>
+</tr>
+<tr>
+<td><code>corpus_review_assignee</code></td>
+<td>送審版本與被指定的同機關審核人員；避免將審核權限只限制在前端。</td>
+</tr>
+<tr>
+<td><code>corpus_feedback</code></td>
+<td>語料、會員、分類、內容、身分別、Email、處理狀態、回覆、處理人及建立／更新時間；與 OD 回饋隔離。必要時保留語料名稱快照或以軟刪除維持歷史可讀。</td>
+</tr>
+<tr>
+<td><code>corpus_feedback_notification</code></td>
+<td>回饋送出給會員／提供者，以及回覆給會員的通知事件、收件者、事件內容快照、狀態與既有寄信佇列識別；事件與回饋狀態同交易寫入。</td>
+</tr>
+<tr>
+<td><code>corpus_subscription</code></td>
+<td>會員與語料訂閱關係及時間，會員／語料組合唯一；供訂閱切換及訂閱數。</td>
+</tr>
+<tr>
+<td><code>corpus_star</code></td>
+<td>會員、語料、星等及時間，會員／語料組合唯一；限制評分範圍 1–5，供個人評分及平均分。</td>
+</tr>
+<tr>
+<td><code>corpus_transfer_work_item</code></td>
+<td>每次移轉的語料、來源／目標機關及提供者、操作人、時間、結果與訊息；語料 ID、既有回饋及訂閱保持不變。</td>
+</tr>
+<tr>
+<td><code>corpus_usage</code>、<code>corpus_usage_day</code></td>
+<td>語料瀏覽／下載累計與按日統計；計數方式參考既有統計，支援列表依瀏覽次數排序及後續報表。</td>
+</tr>
+</tbody></table>
+</div>
+<p>公告優先沿用現有文章資料與服務，補足來源類型、語料 ID 和審核事件識別，以顯示「文本」標籤並避免重複發布；實際欄位依現有公告表檢查後決定。資料表應有必要索引、唯一約束及外鍵，並提供可回滾的 migration。</p>
+<p>回滾限制：migration 依版本反向執行；分類詞彙被文本資料引用時，資料庫外鍵會阻止直接刪除預設詞彙，不能假設有資料時整組 migration 可無條件回滾。應在隔離環境驗證空資料與有資料情境，並事先規劃資料保留／移轉方式；目前未執行資料庫回滾。</p>
+<p>歷程列表查詢先依建立時間、再依遞增識別碼反向排序，以處理時間相同的多筆紀錄；實際分頁及交易時間仍待整合驗證。</p>
+<p>公告事件處理器 <code>system_tasks/publishCorpusAnnouncements.php</code> 從 <code>system.corpus.announcement_templates</code> 取得 <code>new</code> 與 <code>unpublish</code> 模板，各需 <code>title</code>、<code>content</code>；前臺網址取 <code>system.web.frontstage_url</code>。目前支援 <code>{{title}}</code>、<code>{{description}}</code>、<code>{{agency}}</code>、<code>{{reason}}</code>、<code>{{url}}</code> 佔位符；內容中的資料值會作 HTML 跳脫。未設定、未知佔位符或無效網址會停止並記錄失敗，文章與事件狀態同交易處理。必須先取得及核對 111 年盤點表、確認模板與佔位符適用，並實測事件鎖定／回滾／重試後，才能設定排程；目前尚未加入 cron。</p>
+<p>意見回饋通知處理器 <code>system_tasks/queueCorpusFeedbackNotifications.php</code> 使用 <code>system.corpus.feedback_notification_templates</code> 將 <code>submit_member</code>、<code>submit_provider</code>、<code>reply_member</code> 對應至既有 <code>mail_template.name</code>，並在同一交易建立 <code>mail_queue</code> 紀錄與更新通知事件。模板未設定或收件者無效時保留失敗事件；模板內容需與 111 年盤點表核對，並實測交易及寄送後才能設定排程，目前尚未加入 cron。</p>
+<h2 id="api-設計">API 設計</h2>
+<p>名稱依現有 <code>/api/v1</code> 路由風格；前臺與後臺分別註冊並套用各自授權。下列是實作契約，欄位命名與錯誤格式以現有 API 的 payload／驗證慣例定案。</p>
+<p>後臺草稿編輯 <code>POST /api/v1/corpus.revise</code> 傳入語料 <code>id</code>、讀取時取得的 <code>revision_id</code> 與欲修改欄位；後端鎖定語料後再次確認角色範圍及版本，版本已變更時回傳衝突，避免覆蓋別人的修改。新增及編輯均由伺服器決定提供者身分，並使用交易維持工作版本、架上版本與名稱占用的一致性。</p>
+<p>#746 的詳目值沿用列表索引的 <code>resource_last_modified</code> 計算規則，但詳目在請求時讀取資源資料，列表讀取既有搜尋索引；索引尚未更新時兩處數值可能暫時不同。原索引對多筆時間聚合後非單一有效日期的情況會回傳空值，這次保留現行行為，尚待實際資料及索引更新流程驗證。</p>
+<p>後臺 <code>GET corpus.review.list</code> 的 <code>stage</code> 為 <code>all</code>、<code>agency</code> 或 <code>site</code>；機關管理者僅能查詢本機關且指定給自己的機關審核，系統管理者可查詢兩個階段。關鍵字比對名稱及描述，機關篩選受後端角色範圍限制。</p>
+<p>後臺 <code>GET corpus.transfer.list</code> 需要指定機關及提供者，強制只列已上架資料；<code>POST corpus.transfer.submit</code> 接收來源與目標提供者、目標 Myegov 帳號及語料 ID 清單。後端檢查角色、相同一級機關、目標帳號歸屬與最新資料狀態；批次採單一交易，任一筆不符時整批回滾。移轉建立新版本並保留原上架日期及語料識別，記錄歷程。</p>
+<p>逐檔 <code>corpus.resource.add/replace/delete</code> 同樣傳入 <code>id</code> 及目前 <code>revision_id</code>，替換／刪除另傳 <code>resource_id</code>；上傳以 <code>upload</code> 欄位傳送單一檔案。每次成功回傳新的工作版本 ID，後續操作需使用新版本。後臺 <code>corpus.resource.download</code> 傳入語料 ID、檔案 ID 及 <code>working</code>／<code>published</code> 版本；伺服器核對權限與版本關聯，不直接暴露儲存路徑。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>使用端</th>
+<th>方法／路由</th>
+<th>功能與主要限制</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>後臺</td>
+<td><code>GET corpus.list</code>、<code>GET corpus.info</code></td>
+<td>角色範圍內列表與工作版詳目；支援名稱、機關階層、狀態及分頁。</td>
+</tr>
+<tr>
+<td>後臺</td>
+<td><code>POST corpus.add</code>、<code>POST corpus.revise</code>、<code>POST corpus.review</code>（<code>action=cancel</code>）</td>
+<td>建立／修改草稿及依狀態刪除或取消申請；送審前後端檢核必填、名稱唯一及描述不同於名稱。</td>
+</tr>
+<tr>
+<td>後臺</td>
+<td><code>POST corpus.resource.add/replace/delete</code>、<code>GET corpus.resource.download</code></td>
+<td>多檔上傳、替換、移除及依權限下載；後端檢核格式、大小、數量與語料版本。路由細節可配合既有資源 API 調整。</td>
+</tr>
+<tr>
+<td>後臺</td>
+<td><code>GET corpus.review.list</code>、<code>POST corpus.review</code>、<code>GET corpus.review.history.list</code></td>
+<td>待審清單、送審、指定多人、同意、退回、抽回與下架；驗證目前狀態、身分及重複操作，記錄歷程。</td>
+</tr>
+<tr>
+<td>後臺</td>
+<td><code>GET corpus.transfer.list</code>、<code>POST corpus.transfer.submit</code></td>
+<td>勾選已上架資料集，同一級機關內移轉；檢核角色、來源提供者與目標機關，保留狀態及關聯資料。</td>
+</tr>
+<tr>
+<td>前臺</td>
+<td><code>GET corpus.list</code>、<code>GET corpus.info</code>、<code>GET corpus.term.list</code></td>
+<td>僅讀架上版本；名稱／描述搜尋、提供機關多選、應用領域單選、分頁、瀏覽數／最近上架排序、詳目與分類選項。</td>
+</tr>
+<tr>
+<td>前臺</td>
+<td><code>GET corpus.resource.download</code></td>
+<td>依架上版本及開放狀態授權後提供 ZIP；伺服器端重新檢查，不公開工作版或受限檔案路徑。</td>
+</tr>
+<tr>
+<td>前臺</td>
+<td><code>POST corpus.star.upsert</code>、<code>POST corpus.subscribe/unsubscribe</code>；<code>GET corpus.info</code></td>
+<td>登入會員評分、訂閱及取消；回傳平均分、個人評分與訂閱狀態／數量。會員身分由登入 session 取得，不接受用戶端指定。</td>
+</tr>
+<tr>
+<td>前臺會員</td>
+<td><code>POST feedback.corpus.submit</code>、<code>GET feedback.corpus.list/info</code></td>
+<td>會員提交回饋，列表依語料名稱或描述搜尋；後端由登入身分決定會員，只允許讀取本人回饋。</td>
+</tr>
+<tr>
+<td>後臺</td>
+<td><code>GET feedback.corpus.list/info/export</code>、<code>POST feedback.corpus.review</code></td>
+<td>依角色與機關過濾，支援意見內容、日期、機關、狀態、分類搜尋；暫存、結案、通知及 CSV 匯出。</td>
+</tr>
+<tr>
+<td>前臺既有功能</td>
+<td><code>GET news.list/info</code>、<code>GET dataset.info</code></td>
+<td>公告 API 回傳文本來源供列表顯示標籤；dataset.info 回傳與 OD 列表排序同義的 <code>resource_last_modified</code>。</td>
+</tr>
+</tbody></table>
+</div>
+<h2 id="開發順序與待辦">開發順序與待辦</h2>
+<ul>
+<li><input checked="" disabled="" type="checkbox"> 盤點分項需求、現有版本／檔案／回饋及權限架構；將整體規劃與待辦更新至 #696。</li>
+<li><input disabled="" type="checkbox"> 完成 #746：檢查既有列表時間計算與舊系統相容、調整 API 和詳目頁，執行單元與實際整合驗證。</li>
+<li><input disabled="" type="checkbox"> 建立語料資料表 migration、預設詞彙及基本模型；驗證 migration 可套用與回滾，且不影響既有 OD。</li>
+<li><input disabled="" type="checkbox"> #748：加入四項角色功能及選單；實作後端角色、機關、提供者與審核人員範圍檢核。</li>
+<li><input disabled="" type="checkbox"> #749：實作列表、進階搜尋、新增／編輯、完整欄位驗證、多檔管理、草稿、預覽、歷程及下架申請。</li>
+<li><input disabled="" type="checkbox"> #750：實作二階段審核、指定人員、退回、抽回、版本比較及原子發布；處理並行送審與失敗回復。</li>
+<li><input disabled="" type="checkbox"> #745：於新增上架與下架成功後產生對應公告，公告列表顯示文本標籤；確認模板、事件去重與失敗處理。</li>
+<li><input disabled="" type="checkbox"> #751：實作同一級機關移轉、多筆資料處理、Myegov 帳號紀錄與移轉歷程。</li>
+<li><input disabled="" type="checkbox"> #744：實作前臺列表、搜尋、篩選、排序、分頁、詳目、受控 ZIP、評分與訂閱；既有資料查詢及標籤雲加上指定提示。</li>
+<li><input disabled="" type="checkbox"> #747、#752：實作前臺回饋提交及會員專區列表／詳目、後臺列表／篩選／回覆／預覽／匯出與通知。</li>
+<li><input disabled="" type="checkbox"> 對照每個 issue 規格完成整合驗證，更新 #696 的已完成項目、未決事項及驗證結果。</li>
+</ul>
+<h2 id="驗證與完成條件">驗證與完成條件</h2>
+<p>完整上架流程的待執行步驟見 <a href="696-corpus-publication-integration-checklist.html">文本資料集上架整合測試清單</a>。該清單目前尚未執行，不能視為整合測試結果。</p>
+<p>目前驗證紀錄：<code>phpunit tests/Proj --filter &#39;Corpus|ResourceLastModified|FrontMemberAuth&#39;</code> 通過 154 項測試、383 個斷言；利用本機 npm 快取的 Vue 2 模板編譯器與 TypeScript 語法轉譯檢查變更的前端檔案，另以 Vue 3.5 模板編譯器檢查後臺 Vue 模板，皆無語法錯誤。先前誤用 <code>iii-cps</code> 連線執行的合成資料查詢不屬於新北專案驗證，不作為完成證據；該操作僅為只讀查詢，未讀取或修改業務資料。使用者已確認新北專案未連接 DB MCP，也無法直接連線；後續僅依程式碼、migration 與離線測試判斷，真實資料庫結果保留為未驗證。這些檢查不等於專案完整建置、型別檢查或瀏覽器測試；後臺 <code>npm ci --offline</code> 因私有套件 <code>@blueplanet/bpgcms-core</code> 未快取而失敗。</p>
+<ul>
+<li>migration 在隔離的 PostgreSQL 測試資料庫可建立及回滾；驗證資料關聯、唯一限制、索引及版本歸屬，確認既有 OD 資料未受影響。</li>
+<li>後端測試涵蓋正常及越權存取、不同角色與機關、會員只能讀本人回饋、指定審核人、狀態轉換、重複送審與移轉限制。</li>
+<li>檔案測試涵蓋格式、100 MB、20 檔上限、路徑安全、同名檔案、替換／刪除、審核中舊版可用、發布／取消／失敗、受限語料下載與 ZIP。</li>
+<li>驗證前臺清單僅顯示上架版，搜尋條件組合、排序、分頁、評分及訂閱數一致；公告只在確認的事件建立且標籤正確。</li>
+<li>#746 驗證一般資源、舊系統 API／other、無資源及多資源情境，確認詳目顯示和列表排序採相同定義。</li>
+<li>回饋驗證搜尋與匯出範圍、暫存／結案、處理時間、會員狀態顯示與結案通知；「待確認」依 SA 答覆補充測試。</li>
+<li>執行適當的後端單元／整合測試、前後臺建置及必要的實際操作驗證；因環境或外部規格無法驗證之處，明確記錄限制，不能視為完成。</li>
+</ul>
+
+</main>
+</div>
+<footer class="site">本頁由 <code>docs/696-corpus-development-plan.md</code> 產生，請修改 md 後重新執行 <code>docs/html/build.mjs</code>。<br><span>新北市資料開放平臺 #696 文本語料專區・內部開發文件</span></footer>
+</body>
+</html>

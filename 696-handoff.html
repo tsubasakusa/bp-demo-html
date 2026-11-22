@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>#696 文本語料開發交接｜#696 文本語料文件</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #004880; --primary-hover: #0065b3; --primary-dark: #002b4d;
+  --focus: #fb0; --info-bg: #e8f4ff; --info-border: #1a9bff;
+  --warning: #ffa90a; --success: #458227; --danger: #ec0303;
+  --text: #090909; --text-muted: #4d4d4d; --border: #ccc; --border-light: #e5e5e5;
+  --bg: #fff; --bg-soft: #f5f7fa; --footer: #292929;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: 1rem; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: "Noto Sans TC", "helvatica", "Arial", sans-serif, "微軟正黑體"; font-size: 16px; line-height: 1.75; display: flex; flex-direction: column; min-height: 100vh; }
+a { color: var(--primary); text-decoration: none; transition: opacity .16s ease-in; }
+a:hover { text-decoration: underline; }
+a:focus, button:focus, summary:focus { outline: none; box-shadow: 0 0 0 3px var(--focus); }
+.skip { position: absolute; left: -999px; } .skip:focus { left: 1rem; top: 1rem; background: #fff; padding: .25rem .5rem; z-index: 10; }
+header.site { background: var(--primary); color: #fff; border-bottom: 4px solid var(--focus); }
+header.site .inner { max-width: 1280px; margin: 0 auto; padding: .875rem 1rem; display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1.5rem; }
+header.site .brand { color: #fff; font-weight: 700; font-size: 1.25rem; letter-spacing: .04em; }
+header.site .brand small { display: block; font-size: .8125rem; font-weight: 400; opacity: .85; letter-spacing: 0; }
+nav.docs { background: var(--primary-dark); }
+nav.docs ul { max-width: 1280px; margin: 0 auto; padding: 0 1rem; list-style: none; display: flex; flex-wrap: wrap; }
+nav.docs a { display: block; color: #fff; padding: .625rem .875rem; font-size: .9375rem; }
+nav.docs a:hover { background: var(--primary-hover); text-decoration: none; }
+nav.docs a[aria-current="page"] { background: #fff; color: var(--primary); font-weight: 700; }
+.layout { flex: 1; width: 100%; max-width: 1280px; margin: 0 auto; padding: 2rem 1rem 3rem; display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 2.5rem; align-items: start; }
+.layout.no-toc { grid-template-columns: minmax(0, 1fr); }
+aside.toc { position: sticky; top: 1rem; max-height: calc(100vh - 2rem); overflow: auto; border-left: 3px solid var(--primary); padding: .25rem 0 .25rem .875rem; font-size: .875rem; }
+aside.toc summary { margin: 0 0 .5rem; font-size: .9375rem; font-weight: 700; color: var(--primary); cursor: pointer; list-style: none; }
+aside.toc summary::-webkit-details-marker { display: none; }
+aside.toc summary::after { content: " ▾"; font-size: .75rem; }
+aside.toc details:not([open]) summary::after { content: " ▸"; }
+aside.toc ul { list-style: none; margin: 0; padding: 0; }
+aside.toc li { margin: .25rem 0; } aside.toc li.l3 { padding-left: 1rem; font-size: .8125rem; }
+aside.toc a { color: var(--text-muted); } aside.toc a:hover { color: var(--primary); }
+main { min-width: 0; }
+.breadcrumb { font-size: .875rem; color: var(--text-muted); margin-bottom: .75rem; }
+h1.page-title { margin: 0 0 1.5rem; font-size: 1.875rem; color: var(--primary); line-height: 1.4; padding-bottom: .75rem; border-bottom: 2px solid var(--primary); }
+main h2 { margin: 2.5rem 0 1rem; font-size: 1.4375rem; color: var(--primary); padding-left: .75rem; border-left: 5px solid var(--primary); line-height: 1.4; }
+main h3 { margin: 2rem 0 .75rem; font-size: 1.1875rem; color: var(--primary-dark); }
+main h4 { margin: 1.5rem 0 .5rem; font-size: 1.0625rem; }
+main p, main ul, main ol { margin: .75rem 0; }
+main ul, main ol { padding-left: 1.5rem; }
+main li { margin: .25rem 0; }
+main li:has(> input[type=checkbox]) { list-style: none; margin-left: -1.5rem; }
+main input[type=checkbox] { width: 1rem; height: 1rem; margin: 0 .5rem 0 0; vertical-align: -2px; accent-color: var(--success); }
+main strong { color: var(--primary-dark); }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .875em; background: var(--bg-soft); border: 1px solid var(--border-light); border-radius: 4px; padding: .05em .35em; word-break: break-word; }
+pre { background: #1f2933; color: #f5f7fa; border-radius: 6px; padding: 1rem 1.25rem; overflow-x: auto; line-height: 1.6; }
+pre code { background: none; border: 0; padding: 0; color: inherit; font-size: .875rem; word-break: normal; }
+blockquote { margin: 1rem 0; padding: .75rem 1rem; background: var(--info-bg); border-left: 4px solid var(--info-border); color: var(--primary-dark); }
+blockquote p { margin: .25rem 0; }
+.table-wrap { overflow-x: auto; margin: 1rem 0; }
+table { border-collapse: collapse; width: 100%; font-size: .9375rem; }
+th, td { border: 1px solid var(--border); padding: .5rem .75rem; text-align: left; vertical-align: top; }
+thead th { background: var(--primary); color: #fff; font-weight: 700; white-space: nowrap; }
+tbody tr:nth-child(even) { background: var(--bg-soft); }
+hr { border: 0; border-top: 1px solid var(--border); margin: 2rem 0; }
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+.card { display: block; border: 1px solid var(--border); border-top: 4px solid var(--primary); border-radius: 4px; padding: 1rem 1.25rem; color: var(--text); background: #fff; transition: box-shadow .16s ease-in; }
+.card:hover { text-decoration: none; box-shadow: 0 4px 12px rgba(9, 9, 9, .15); }
+.card strong { display: block; color: var(--primary); font-size: 1.0625rem; margin-bottom: .25rem; }
+.card span { color: var(--text-muted); font-size: .875rem; }
+.card small { display: block; margin-top: .5rem; color: var(--text-muted); font-size: .75rem; }
+footer.site { background: var(--footer); color: #fff; text-align: center; padding: 1.25rem 1rem; font-size: .8125rem; line-height: 1.6; }
+footer.site span { opacity: .8; }
+@media (max-width: 960px) {
+  .layout { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; padding-top: 1.25rem; }
+  aside.toc { position: static; max-height: none; background: var(--bg-soft); padding: .5rem .875rem; }
+  aside.toc summary { margin: 0; }
+  aside.toc details[open] summary { margin-bottom: .5rem; }
+  nav.docs ul { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  nav.docs a { white-space: nowrap; }
+  h1.page-title { font-size: 1.5rem; }
+}
+@media print {
+  header.site, nav.docs, aside.toc, footer.site { display: none; }
+  .layout { display: block; padding: 0; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#content">跳至主要內容</a>
+<header class="site"><div class="inner"><a class="brand" href="index.html">新北市資料開放平臺<small>#696 文本語料專區・開發文件</small></a></div></header>
+<nav class="docs" aria-label="文件選單"><ul><li><a href="index.html">文件首頁</a></li><li><a href="696-status.html">文本語料進度與待辦</a></li><li><a href="696-corpus-api.html">文本語料 API 說明（前端串接用）</a></li><li><a href="696-corpus-development-plan.html">#744–#752 文本語料開發計畫</a></li><li><a href="696-corpus-publication-integration-checklist.html">文本資料集上架整合測試清單</a></li><li><a href="696-handoff.html" aria-current="page">文本語料開發交接</a></li><li><a href="696-local-testing-data-preparation.html">本機測試資料準備</a></li></ul></nav>
+<div class="layout">
+<aside class="toc" aria-label="本頁目錄"><details open><summary>本頁目錄</summary><ul><li class="l2"><a href="#工作位置">工作位置</a></li><li class="l2"><a href="#現況">現況</a></li><li class="l2"><a href="#已確認規則">已確認規則</a></li><li class="l2"><a href="#下一步">下一步</a></li></ul></details></aside>
+<script>if (window.matchMedia('(max-width: 960px)').matches) document.querySelector('aside.toc details').removeAttribute('open')</script>
+<main id="content">
+<div class="breadcrumb"><a href="index.html">文件首頁</a> ／ #696 文本語料開發交接</div>
+<h1 class="page-title">#696 文本語料開發交接</h1>
+<h2 id="工作位置">工作位置</h2>
+<ul>
+<li>專案：<code>/home/itsour/project/ntpc-od-new</code>；分支：<code>feature/696-corpus-research</code>。</li>
+<li>工作樹有大量<strong>未提交及未追蹤</strong>變更，包含本交接文件；接手前先用 <code>git status</code> 確認，請勿清除、覆蓋或直接視為已合併。</li>
+<li>主 issue：<a href="https://gitlab.blueplanet.com.tw/RD/ntpc-od-new/-/work_items/696">RD/ntpc-od-new #696</a>，範圍 #744–#752。目標目前為 blocked，尚未完成。</li>
+</ul>
+<h2 id="現況">現況</h2>
+<ul>
+<li>已建立文本語料獨立資料表 migration、後端 API、前後臺頁面、審核／移轉／意見回饋及公告、通知事件處理器的<strong>初版</strong>；#746 已調整既有資料集詳目時間欄位。主要程式位置：<code>backend/app/Module/Corpus/</code>、<code>backend/routes/</code>、<code>frontend/backstage/src/views/corpus/</code>、<code>frontend/frontstage/pages/corpus/</code>。</li>
+<li>有離線單元測試及前端模板／語法檢查；最近完整記錄為 154 項測試、383 個斷言，後續有新增測試，接手時應重新執行。<strong>完整上架整合測試、資料庫 migration／交易、完整前後臺建置與瀏覽器操作均未驗證。</strong></li>
+<li>公告與信件範本、排程尚未設定；#752「待確認」狀態仍待 SA 說明。不要將初版視為可部署或將 issue 標記完成。</li>
+</ul>
+<h2 id="已確認規則">已確認規則</h2>
+<ul>
+<li>多檔最多 20 個、每檔 100 MB；逐檔新增、刪除、替換。上架版本與修改中的工作版本需分開。</li>
+<li>新增與下架審核通過會建立公告事件；<strong>修改審核通過不公告</strong>。兩階段審核後即時上架／下架，不做資料轉換。</li>
+<li>eGov 帳號僅預留，不做數發部同步。AI 限制資料在申請審核功能完成前不可下載。</li>
+<li>「其他」是共同分類，補充名稱屬資料集版本：篩選與列表顯示「其他」，詳目顯示例如「其他 [育兒]」。正確詞彙為「交通運輸」、「綠色永續」。</li>
+<li>#746「上次更新時間」與現行列表的<strong>資料資源更新時間</strong>採相同定義；列表讀索引、詳目即時計算，索引延遲時可能不同。#752 暫存與送出均更新 <code>changed</code>。</li>
+</ul>
+<h2 id="下一步">下一步</h2>
+<ol>
+<li>使用者表示可從 testing 準備資料庫副本；先確認取得及去識別化方式，建立<strong>獨立</strong>本機環境，再在副本執行 migration 與整合測試。新北目前沒有 DB MCP；不得誤用 <code>iii-cps</code>，也不要對共享 testing 直接寫入。</li>
+<li>本工作區 Docker Desktop 的 WSL 整合未啟用，前臺 Nuxt、後臺 Vite 及私有 npm 套件未完整安裝；建置方式及限制見下方文件。使用者已取得可自行執行的 npm 指令，結果尚未回報。</li>
+<li>取得 111 年公告及信件盤點範本、#752 狀態答覆後完成設定及驗證；依實際整合結果修正，更新 #696。</li>
+</ol>
+<p>詳細計畫：<a href="696-corpus-development-plan.html">696-corpus-development-plan.md</a>；環境準備：<a href="696-local-testing-data-preparation.html">696-local-testing-data-preparation.md</a>；待執行上架測試：<a href="696-corpus-publication-integration-checklist.html">696-corpus-publication-integration-checklist.md</a>。</p>
+<p>離線後端測試：<code>cd backend &amp;&amp; vendor/bin/phpunit tests/Proj --filter &#39;Corpus|ResourceLastModified|FrontMemberAuth&#39;</code>。</p>
+
+</main>
+</div>
+<footer class="site">本頁由 <code>docs/696-handoff.md</code> 產生，請修改 md 後重新執行 <code>docs/html/build.mjs</code>。<br><span>新北市資料開放平臺 #696 文本語料專區・內部開發文件</span></footer>
+</body>
+</html>
